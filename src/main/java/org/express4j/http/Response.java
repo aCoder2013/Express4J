@@ -1,7 +1,6 @@
 package org.express4j.http;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import org.express4j.utils.JsonUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,9 +19,18 @@ public class Response {
         this.servletResponse = servletResponse;
     }
 
+    public Response status(int code){
+        servletResponse.setStatus(code);
+        return this;
+    }
 
+    public void send(String text){
+        getWriter().write(text);
+        getWriter().flush();
+        getWriter().close();
+    }
 
-    public void sendHtml(String htmlContent){
+    public void renderHtml(String htmlContent){
         PrintWriter writer = getWriter();
         writer.write(htmlContent);
         writer.flush();
@@ -41,9 +49,7 @@ public class Response {
     }
 
     public  void json(Object jsonContent){
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.create();
-        String json = gson.toJson(jsonContent);
+        String json = JsonUtils.toJson(jsonContent);
         servletResponse.setContentType("application/json;charset=UTF-8");
         getWriter().write(json);
         getWriter().flush();
