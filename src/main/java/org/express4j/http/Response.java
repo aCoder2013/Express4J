@@ -24,7 +24,7 @@ public class Response {
         return this;
     }
 
-    public void send(String text){
+    public void renderText(String text){
         getWriter().write(text);
         getWriter().flush();
         getWriter().close();
