@@ -47,9 +47,7 @@ public class CoreFilter implements Filter {
         try {
             if (handler!=null) {
                 //setup request/response
-                Request mRequest = new Request();
-                mRequest.setBaseUrl(path)
-                .setMethod(request.getMethod());
+                Request mRequest = new Request(request);
                 Response mResponse = new Response();
                 mResponse.setWriter(response.getWriter());
                 handler.handle(mRequest, mResponse);
