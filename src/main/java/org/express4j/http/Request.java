@@ -1,11 +1,14 @@
 package org.express4j.http;
 
-import org.apache.commons.io.IOUtils;
+import org.express4j.utils.IOUtils;
 import org.express4j.utils.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Song on 2015/12/4.

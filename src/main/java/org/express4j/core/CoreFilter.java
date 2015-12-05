@@ -48,8 +48,7 @@ public class CoreFilter implements Filter {
             if (handler!=null) {
                 //setup request/response
                 Request mRequest = new Request(request);
-                Response mResponse = new Response();
-                mResponse.setWriter(response.getWriter());
+                Response mResponse = new Response(response);
                 handler.handle(mRequest, mResponse);
             }
         } catch (Exception e) {
