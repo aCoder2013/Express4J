@@ -3,6 +3,7 @@ package org.express4j.http;
 import org.express4j.utils.IOUtils;
 import org.express4j.utils.StringUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Collections;
@@ -27,6 +28,10 @@ public class Request {
 
     private Map<String,String>  headers = new HashMap<>();
     private boolean headerParsed = false;
+
+    private Map<String,String> cookieMap = new HashMap<>();
+
+    private boolean cookieParsed = false;
 
     public Request(HttpServletRequest request) {
         this.servletRequest = request;
@@ -173,5 +178,39 @@ public class Request {
             e.printStackTrace();
         }
     }
+
+    /**
+     * @return the cookies of request
+     */
+    public Map<String,String> cookies(){
+        if (!cookieParsed) {
+            parseCookie();
+        }
+        return cookieMap;
+    }
+
+    /**
+     * Parse cookies of the reuqest
+     */
+    private void parseCookie() {
+        Cookie[] cookies = servletRequest.getCookies();
+        for(Cookie cookie : cookies){
+            String name = cookie.getName();
+            String value = cookie.getValue();
+            cookieMap.put(name, value);
+        }
+    }
+
+    /**
+     * @param name
+     * @return Get value of cookie with given name
+     */
+    public String cookie(String name){
+        if(!cookieParsed){
+            parseCookie();
+        }
+        return cookieMap.get(name);
+    }
+
 }
 

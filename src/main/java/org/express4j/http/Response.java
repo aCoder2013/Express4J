@@ -2,6 +2,7 @@ package org.express4j.http;
 
 import org.express4j.utils.JsonUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -49,6 +50,9 @@ public class Response {
     }
 
     public  void json(Object jsonContent){
+        servletResponse.setHeader("Pragma", "no-cache");	// HTTP/1.0 caches might not implement Cache-Control and might only implement Pragma: no-cache
+        servletResponse.setHeader("Cache-Control", "no-cache");
+        servletResponse.setDateHeader("Expires", 0);
         String json = JsonUtils.toJson(jsonContent);
         servletResponse.setContentType("application/json;charset=UTF-8");
         getWriter().write(json);
@@ -64,5 +68,103 @@ public class Response {
         //todo
     }
 
+    /**
+     * Adds not persistent cookie to the response.
+     * Can be invoked multiple times to insert more than one cookie.
+     *
+     * @param name  name of the cookie
+     * @param value value of the cookie
+     */
+    public void cookie(String name, String value) {
+        cookie(name, value, -1, false);
+    }
+
+    /**
+     * Adds cookie to the response. Can be invoked multiple times to insert more than one cookie.
+     *
+     * @param name   name of the cookie
+     * @param value  value of the cookie
+     * @param maxAge max age of the cookie in seconds (negative for the not persistent cookie,
+     *               zero - deletes the cookie)
+     */
+    public void cookie(String name, String value, int maxAge) {
+        cookie(name, value, maxAge, false);
+    }
+
+    /**
+     * Adds cookie to the response. Can be invoked multiple times to insert more than one cookie.
+     *
+     * @param name    name of the cookie
+     * @param value   value of the cookie
+     * @param maxAge  max age of the cookie in seconds (negative for the not persistent cookie, zero - deletes the cookie)
+     * @param secured if true : cookie will be secured
+     */
+    public void cookie(String name, String value, int maxAge, boolean secured) {
+        cookie(name, value, maxAge, secured, false);
+    }
+
+    /**
+     * Adds cookie to the response. Can be invoked multiple times to insert more than one cookie.
+     *
+     * @param name     name of the cookie
+     * @param value    value of the cookie
+     * @param maxAge   max age of the cookie in seconds (negative for the not persistent cookie, zero - deletes the cookie)
+     * @param secured  if true : cookie will be secured
+     * @param httpOnly if true: cookie will be marked as http only
+     */
+    public void cookie(String name, String value, int maxAge, boolean secured, boolean httpOnly) {
+        cookie("", name, value, maxAge, secured, httpOnly);
+    }
+
+    /**
+     * Adds cookie to the response. Can be invoked multiple times to insert more than one cookie.
+     *
+     * @param path    path of the cookie
+     * @param name    name of the cookie
+     * @param value   value of the cookie
+     * @param maxAge  max age of the cookie in seconds (negative for the not persistent cookie, zero - deletes the cookie)
+     * @param secured if true : cookie will be secured
+     */
+    public void cookie(String path, String name, String value, int maxAge, boolean secured) {
+        cookie(path, name, value, maxAge, secured, false);
+    }
+
+    /**
+     * Adds cookie to the response. Can be invoked multiple times to insert more than one cookie.
+     *
+     * @param path     path of the cookie
+     * @param name     name of the cookie
+     * @param value    value of the cookie
+     * @param maxAge   max age of the cookie in seconds (negative for the not persistent cookie, zero - deletes the cookie)
+     * @param secured  if true : cookie will be secured
+     * @param httpOnly if true: cookie will be marked as http only
+     */
+    public void cookie(String path, String name, String value, int maxAge, boolean secured, boolean httpOnly) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setPath(path);
+        cookie.setMaxAge(maxAge);
+        cookie.setSecure(secured);
+        cookie.setHttpOnly(httpOnly);
+        servletResponse.addCookie(cookie);
+    }
+
+    /**
+     * Add cookie to the response
+     * @param cookie
+     */
+    public void cookie(Cookie cookie){
+        servletResponse.addCookie(cookie);
+    }
+
+    /**
+     * Removes the cookie.
+     *
+     * @param name name of the cookie
+     */
+    public void removeCookie(String name) {
+        Cookie cookie = new Cookie(name, "");
+        cookie.setMaxAge(0);
+        servletResponse.addCookie(cookie);
+    }
 
 }
