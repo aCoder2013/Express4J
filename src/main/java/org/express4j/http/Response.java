@@ -49,17 +49,36 @@ public class Response {
         return writer;
     }
 
-    public  void json(Object jsonContent){
+    public void json(Object jsonContent){
         servletResponse.setHeader("Pragma", "no-cache");	// HTTP/1.0 caches might not implement Cache-Control and might only implement Pragma: no-cache
         servletResponse.setHeader("Cache-Control", "no-cache");
         servletResponse.setDateHeader("Expires", 0);
-        String json = JsonUtils.toJson(jsonContent);
         servletResponse.setContentType("application/json;charset=UTF-8");
+        String json = JsonUtils.toJson(jsonContent);
         getWriter().write(json);
         getWriter().flush();
         getWriter().close();
     }
 
+
+    /**
+     * Sends a JSON response with JSONP support.
+     * This method is identical to res.json(),
+     * except that it opts-in to JSONP callback support.
+     * @param callback name of the callback method name
+     * @param jsonContent content in json format
+     */
+    public void jsonp(String callback,Object jsonContent){
+        servletResponse.setHeader("Pragma", "no-cache");	// HTTP/1.0 caches might not implement Cache-Control and might only implement Pragma: no-cache
+        servletResponse.setHeader("Cache-Control", "no-cache");
+        servletResponse.setDateHeader("Expires", 0);
+        servletResponse.setContentType("application/json;charset=UTF-8");
+        String json = JsonUtils.toJson(jsonContent);
+        json = callback+"("+json+");";
+        getWriter().write(json);
+        getWriter().flush();
+        getWriter().close();
+    }
     public void redirect(String path){
         //todo
     }
