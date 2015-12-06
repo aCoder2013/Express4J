@@ -1,5 +1,6 @@
 package org.express4j.http;
 
+import org.express4j.render.FreemarkerRender;
 import org.express4j.utils.JsonUtils;
 import org.express4j.utils.StringUtils;
 
@@ -20,6 +21,16 @@ public class Response {
     public Response(HttpServletResponse servletResponse) {
         this.servletResponse = servletResponse;
     }
+
+
+    /**
+     * Set content type of response
+     * @param contentType
+     */
+    public void type(String contentType){
+        servletResponse.setContentType(contentType);
+    }
+
 
     /**
      * set the HTTP status for the response.
@@ -102,6 +113,12 @@ public class Response {
         getWriter().close();
     }
 
+    public void send(String path){
+        if(path.startsWith("/")){
+            path.substring(0,path.length());
+        }
+        FreemarkerRender.getInstance().render(path, null,getWriter());
+    }
 
     public void redirect(String path){
         //todo

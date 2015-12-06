@@ -22,12 +22,12 @@ public final class Express4J {
     /**
      * 默认静态文件路径
      */
-    public static final String DEFAULT_STATIC_PATH = "/resources/static";
+    public static final String DEFAULT_STATIC_PATH = "/resources/static/";
 
     /**
      * 默认模板文件路径
      */
-    public static final String DEFAULT_TEMPLATE_PATH = "/resources/templates";
+    public static final String DEFAULT_TEMPLATE_PATH = "templates";
 
 
 
