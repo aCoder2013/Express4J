@@ -1,6 +1,7 @@
 package org.express4j.http;
 
 import org.express4j.utils.JsonUtils;
+import org.express4j.utils.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -20,17 +21,30 @@ public class Response {
         this.servletResponse = servletResponse;
     }
 
+    /**
+     * set the HTTP status for the response.
+     * @param code HTTP status code
+     * @return Response itself
+     */
     public Response status(int code){
         servletResponse.setStatus(code);
         return this;
     }
 
+    /**
+     * Renders a String as text
+     * @param text
+     */
     public void renderText(String text){
         getWriter().write(text);
         getWriter().flush();
         getWriter().close();
     }
 
+    /**
+     * Renders a String as HTML
+     * @param htmlContent
+     */
     public void renderHtml(String htmlContent){
         PrintWriter writer = getWriter();
         writer.write(htmlContent);
@@ -38,6 +52,10 @@ public class Response {
         writer.close();
     }
 
+    /**
+     * Help to get writer of response
+     * @return
+     */
     private PrintWriter getWriter() {
        if(writer==null){
            try {
@@ -49,6 +67,10 @@ public class Response {
         return writer;
     }
 
+    /**
+     * Renders a Object as Json
+     * @param jsonContent
+     */
     public void json(Object jsonContent){
         servletResponse.setHeader("Pragma", "no-cache");	// HTTP/1.0 caches might not implement Cache-Control and might only implement Pragma: no-cache
         servletResponse.setHeader("Cache-Control", "no-cache");
@@ -72,16 +94,20 @@ public class Response {
         servletResponse.setHeader("Pragma", "no-cache");	// HTTP/1.0 caches might not implement Cache-Control and might only implement Pragma: no-cache
         servletResponse.setHeader("Cache-Control", "no-cache");
         servletResponse.setDateHeader("Expires", 0);
-        servletResponse.setContentType("application/json;charset=UTF-8");
+        servletResponse.setContentType("application/javascript");
         String json = JsonUtils.toJson(jsonContent);
         json = callback+"("+json+");";
         getWriter().write(json);
         getWriter().flush();
         getWriter().close();
     }
+
+
     public void redirect(String path){
         //todo
     }
+
+
 
     public void sendStaticFile(String path){
         //todo
@@ -132,7 +158,7 @@ public class Response {
      * @param httpOnly if true: cookie will be marked as http only
      */
     public void cookie(String name, String value, int maxAge, boolean secured, boolean httpOnly) {
-        cookie("", name, value, maxAge, secured, httpOnly);
+        cookie("/", name, value, maxAge, secured, httpOnly);
     }
 
     /**
@@ -151,7 +177,7 @@ public class Response {
     /**
      * Adds cookie to the response. Can be invoked multiple times to insert more than one cookie.
      *
-     * @param path     path of the cookie
+     * @param path     path of the cookie ,defaults to "/"
      * @param name     name of the cookie
      * @param value    value of the cookie
      * @param maxAge   max age of the cookie in seconds (negative for the not persistent cookie, zero - deletes the cookie)
@@ -160,12 +186,34 @@ public class Response {
      */
     public void cookie(String path, String name, String value, int maxAge, boolean secured, boolean httpOnly) {
         Cookie cookie = new Cookie(name, value);
+        if(StringUtils.isEmpty(path)){
+            path = "/";
+        }
         cookie.setPath(path);
         cookie.setMaxAge(maxAge);
         cookie.setSecure(secured);
         cookie.setHttpOnly(httpOnly);
         servletResponse.addCookie(cookie);
     }
+
+    /**
+     * Sets the response Location HTTP header to the specified path parameter.
+     * A path value of “back” has a special meaning,
+     * it refers to the URL specified in the Referer header of the request.
+     * If the Referer header was not specified, it refers to “/”.
+     * @param path value of location header
+     * @return
+     */
+    public Response location(String path){
+        String location = path;
+        if(path.equals("back")){
+            location = !StringUtils.isEmpty(servletResponse.getHeader("Referrer"))
+                    ?servletResponse.getHeader("Referrer"):"/";
+        }
+        servletResponse.addHeader("Location",location);
+        return this;
+    }
+
 
     /**
      * Add cookie to the response
