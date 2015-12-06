@@ -8,6 +8,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Song on 2015/12/4.
@@ -18,9 +20,22 @@ public class Response {
 
     private HttpServletResponse servletResponse;
 
+    private Map<String,Object> models = new HashMap<>();
+
     public Response(HttpServletResponse servletResponse) {
         this.servletResponse = servletResponse;
     }
+
+
+    /**
+     * Add key/value to model
+     * @param name
+     * @param value
+     */
+    public void set(String name,Object value){
+        models.put(name,value);
+    }
+
 
 
     /**
@@ -117,7 +132,7 @@ public class Response {
         if(path.startsWith("/")){
             path.substring(0,path.length());
         }
-        FreemarkerRender.getInstance().render(path, null,getWriter());
+        FreemarkerRender.getInstance().render(path, models, getWriter());
     }
 
     public void redirect(String path){
