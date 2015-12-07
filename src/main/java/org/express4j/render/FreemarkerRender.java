@@ -5,6 +5,7 @@ import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.express4j.core.Express4JConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,31 +19,28 @@ import java.util.Map;
  */
 public class FreemarkerRender {
 
-    private  final Logger logger = LoggerFactory.getLogger(FreemarkerRender.class);
+    private static final Logger logger = LoggerFactory.getLogger(FreemarkerRender.class);
 
-    private static final FreemarkerRender INSTANCE = new FreemarkerRender();
-    private final String DEFAULT_TEMPLATE_CHARSET = "UTF-8";
-    private  Configuration configuration;
+    /**
+     * 默认模板编码
+     */
+    private static final String DEFAULT_TEMPLATE_CHARSET = "UTF-8";
+    /**
+     * Freemarker配置
+     */
+    private static Configuration configuration;
 
-    private  String defaultTemplateDir = getClass().getClassLoader().getResource("templates").getPath();
 
-    private boolean initiated = false;
 
-    public static FreemarkerRender getInstance(){
-        return INSTANCE;
-    }
-
-    public void init() {
-        logger.info(defaultTemplateDir);
+    static {
         /**
-         * 在整个应用的生命周期中，这个工作你应该只做一次。
+         * 在整个应用的生命周期中，只初始化一次。
         */
         configuration = new Configuration();
         try {
             configuration.setDirectoryForTemplateLoading(
-                    new File(defaultTemplateDir));
+                    new File(Express4JConfig.getTemplatesPath()));
             configuration.setObjectWrapper(new DefaultObjectWrapper());
-            initiated = true;
         } catch (IOException e) {
             logger.error("Template Directory Loading Failure", e);
             e.printStackTrace();
@@ -50,11 +48,14 @@ public class FreemarkerRender {
     }
 
 
-
-    public  void render(String name,Map<String,Object> models,Writer output){
-        if(!initiated){
-           init();
-        }
+    /**
+     *  用给定的模型渲染模板，写到给定的输出中
+     * to the supplied {@link Writer}.
+     * @param name The name of the template. Can't be {@code null}.
+     * @param models the holder of the variables visible from the template (name-value pairs)
+     * @param output The {@link Writer} where the output of the template will go.
+     */
+    public static void render(String name,Map<String,Object> models,Writer output){
         try {
             Template template = configuration.getTemplate(name,DEFAULT_TEMPLATE_CHARSET);
             template.process(models,output);

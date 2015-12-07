@@ -19,16 +19,6 @@ public final class Express4J {
     private static final Express4J INSTANCE = new Express4J();
 
     private static Server server;
-    /**
-     * 默认静态文件路径
-     */
-    public static final String DEFAULT_STATIC_PATH = "/resources/static/";
-
-    /**
-     * 默认模板文件路径
-     */
-    public static final String DEFAULT_TEMPLATE_PATH = "templates";
-
 
 
 
@@ -51,7 +41,7 @@ public final class Express4J {
      * @param path
      */
     public static void staticFilePath(String path){
-        Express4JConfig.set(Express4JConstants.STATIC_FILE_PATH,path);
+        Express4JConfig.setStaticFilePath(path);
     }
 
     /**
@@ -60,7 +50,7 @@ public final class Express4J {
      * @param path
      */
     public static void templatePath(String path){
-        Express4JConfig.set(Express4JConstants.TEMPLATES_PATH,path);
+        Express4JConfig.setTemplatesPath(path);
     }
 
     /**
@@ -68,16 +58,10 @@ public final class Express4J {
      * @param port
      */
     public static void serverPort(int port){
-        Express4JConfig.set(Express4JConstants.SERVER_PORT,String.valueOf(port));
+        Express4JConfig.setServerPort(port);
     }
 
-    /**
-     * 得到服务器端口
-     * @return
-     */
-    public static int serverPort(){
-        return Express4JConfig.getInteger(Express4JConstants.SERVER_PORT,DEFAULT_SERVER_PORT);
-    }
+
     /**
      * 匹配HTTP GET 请求
      * @param path
@@ -91,7 +75,7 @@ public final class Express4J {
      * 启动应用
      */
     public static void run(){
-        JettyServer.setServerPort(serverPort());
+        JettyServer.setServerPort(Express4JConfig.getServerPort());
         JettyServer.start();
     }
 }
