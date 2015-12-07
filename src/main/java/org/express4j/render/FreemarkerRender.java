@@ -50,7 +50,7 @@ public class FreemarkerRender {
 
 
     /**
-     *  用给定的模型渲染模板，写到给定的输出中
+     * 用给定的模型渲染模板，写到给定的输出中
      * to the supplied {@link Writer}.
      * @param name The name of the template. Can't be {@code null}.
      * @param models the holder of the variables visible from the template (name-value pairs)

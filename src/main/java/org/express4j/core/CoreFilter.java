@@ -5,6 +5,8 @@ import org.express4j.http.Request;
 import org.express4j.http.Response;
 import org.express4j.router.DefaultRouterFactory;
 import org.express4j.webserver.JettyServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -21,12 +23,13 @@ import java.io.IOException;
 @WebFilter(urlPatterns = "/*")
 public class CoreFilter implements Filter {
 
+    private static final Logger logger = LoggerFactory.getLogger(CoreFilter.class);
     private static final String DEFAULT_CHARSET = "UTF-8";
     
 
 
     public void init(FilterConfig filterConfig) throws ServletException {
-        System.out.println("CoreFilter Init ");
+        logger.info("CoreFilter Init");
     }
 
 
@@ -41,19 +44,15 @@ public class CoreFilter implements Filter {
         response.setCharacterEncoding(DEFAULT_CHARSET);
 
         String path = getPath(request);
-
-
         Handler handler = DefaultRouterFactory.getHandler(request.getMethod(),path);
-        try {
             if (handler!=null) {
-                //setup request/response
-                Request mRequest = new Request(request);
-                Response mResponse = new Response(response);
-                handler.handle(mRequest, mResponse);
+                try {
+                    handler.handle(new Request(request),new Response(response));
+                } catch (Exception e) {
+                    logger.error("Execute Handler Failure",e);
+                    throw new RuntimeException(e);
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**

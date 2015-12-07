@@ -1,6 +1,5 @@
 package org.express4j.core;
 
-import org.eclipse.jetty.server.Server;
 import org.express4j.handler.Handler;
 import org.express4j.router.DefaultRouterFactory;
 import org.express4j.webserver.JettyServer;
@@ -12,13 +11,11 @@ import org.slf4j.LoggerFactory;
  */
 public final class Express4J {
 
-    private static final int DEFAULT_SERVER_PORT = 8080;
 
     private Logger logger = LoggerFactory.getLogger(Express4J.class);
     
     private static final Express4J INSTANCE = new Express4J();
 
-    private static Server server;
 
 
 
@@ -75,12 +72,9 @@ public final class Express4J {
      * 启动应用
      */
     public static void run(){
-        initFreemarker();
         JettyServer.setServerPort(Express4JConfig.getServerPort());
         JettyServer.start();
     }
 
-    private static void initFreemarker() {
 
-    }
 }
