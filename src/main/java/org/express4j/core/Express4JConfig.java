@@ -1,60 +1,43 @@
 package org.express4j.core;
 
 
-import org.express4j.utils.ClassUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Song on 2015/12/4.
  */
 public class Express4JConfig {
 
-
-    /**
-     * 默认静态文件路径
-     */
-    public static final String DEFAULT_STATIC_PATH = "static";
-
-    /**
-     * 默认模板文件路径
-     */
-    public static final String DEFAULT_TEMPLATE_PATH = "templates";
-
-
+    private static final Logger logger = LoggerFactory.getLogger(Express4JConfig.class);
 
     /**
      * 静态文件路径
      */
-    public static String staticFilePath ;
+    public static String staticFilePath ="static";
 
     /**
      * 模板文件存放路径
      */
-    public static String templatesPath;
+    public static String templatesPath = "templates";
 
     /**
      * 服务器监听端口
      */
-    public static int serverPort ;
+    public static int serverPort  = 8080;
 
     /**
      * 默认监听端口
      */
     private static final int DEFAULT_SERVER_PORT = 8080;
 
-    /**
-     * 初始化默认配置
-     */
-    static {
-        staticFilePath = ClassUtils.getResourcePath(DEFAULT_STATIC_PATH);
-        templatesPath  = ClassUtils.getResourcePath(DEFAULT_TEMPLATE_PATH);
-        serverPort = DEFAULT_SERVER_PORT;
-    }
 
     public static String getStaticFilePath() {
         return staticFilePath;
     }
 
     public static void setStaticFilePath(String staticFilePath) {
+        logger.info("Set static file path to :" + staticFilePath);
         Express4JConfig.staticFilePath = staticFilePath;
     }
 
@@ -63,6 +46,7 @@ public class Express4JConfig {
     }
 
     public static void setTemplatesPath(String templatesPath) {
+        logger.info("Set templates path to :" + templatesPath);
         Express4JConfig.templatesPath = templatesPath;
     }
 

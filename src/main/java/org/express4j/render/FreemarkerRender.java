@@ -6,6 +6,7 @@ import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.express4j.core.Express4JConfig;
+import org.express4j.utils.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ public class FreemarkerRender {
         configuration = new Configuration();
         try {
             configuration.setDirectoryForTemplateLoading(
-                    new File(Express4JConfig.getTemplatesPath()));
+                    new File(ClassUtils.getResourcePath(Express4JConfig.getTemplatesPath())));
             configuration.setObjectWrapper(new DefaultObjectWrapper());
         } catch (IOException e) {
             logger.error("Template Directory Loading Failure", e);

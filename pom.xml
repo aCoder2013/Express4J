@@ -40,6 +40,14 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <!-- JWebUnit DEPENDENCY-->
+        <dependency>
+            <groupId>net.sourceforge.jwebunit</groupId>
+            <artifactId>jwebunit-htmlunit-plugin</artifactId>
+            <version>3.3</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- GSON DEPENDENCY-->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -56,6 +64,13 @@
     </dependencies>
 
     <build>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

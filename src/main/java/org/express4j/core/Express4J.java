@@ -75,7 +75,12 @@ public final class Express4J {
      * 启动应用
      */
     public static void run(){
+        initFreemarker();
         JettyServer.setServerPort(Express4JConfig.getServerPort());
         JettyServer.start();
+    }
+
+    private static void initFreemarker() {
+
     }
 }
