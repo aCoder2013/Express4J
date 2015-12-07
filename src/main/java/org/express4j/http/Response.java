@@ -132,7 +132,7 @@ public class Response {
         if(path.startsWith("/")){
             path.substring(0,path.length());
         }
-        FreemarkerRender.getInstance().render(path, models, getWriter());
+        FreemarkerRender.render(path, models, getWriter());
     }
 
     public void redirect(String path){
