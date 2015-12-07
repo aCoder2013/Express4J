@@ -26,11 +26,6 @@ public class Express4JConfig {
      */
     public static int serverPort  = 8080;
 
-    /**
-     * 默认监听端口
-     */
-    private static final int DEFAULT_SERVER_PORT = 8080;
-
 
     public static String getStaticFilePath() {
         return staticFilePath;
