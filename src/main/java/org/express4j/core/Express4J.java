@@ -69,6 +69,17 @@ public final class Express4J {
     }
 
     /**
+     * 匹配HTTP POST 请求
+     * @param path
+     * @param handler
+     */
+    public static void post(String path,Handler handler){
+        DefaultRouterFactory.addRouter("POST",path,handler);
+    }
+
+
+
+    /**
      * 启动应用
      */
     public static void run(){

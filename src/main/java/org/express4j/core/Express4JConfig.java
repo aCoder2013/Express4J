@@ -27,6 +27,13 @@ public class Express4JConfig {
     public static int serverPort  = 8080;
 
 
+    /**
+     * 最大文件上传容量
+     * @return
+     */
+    private static int maxFileSize = 10*1024*1024;
+
+
     public static String getStaticFilePath() {
         return staticFilePath;
     }
@@ -51,5 +58,15 @@ public class Express4JConfig {
 
     public static void setServerPort(int serverPort) {
         Express4JConfig.serverPort = serverPort;
+    }
+
+
+    public static int getMaxFileSize() {
+        return maxFileSize;
+    }
+
+    public static void setMaxFileSize(int maxFileSize) {
+        logger.info("Set max file upload size  to :" + maxFileSize);
+        Express4JConfig.maxFileSize = maxFileSize;
     }
 }

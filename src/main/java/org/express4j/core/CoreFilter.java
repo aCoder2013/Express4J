@@ -3,6 +3,7 @@ package org.express4j.core;
 import org.express4j.handler.Handler;
 import org.express4j.http.Request;
 import org.express4j.http.Response;
+import org.express4j.multipart.FileUploadHelper;
 import org.express4j.router.DefaultRouterFactory;
 import org.express4j.webserver.JettyServer;
 import org.slf4j.Logger;
@@ -26,10 +27,13 @@ public class CoreFilter implements Filter {
     private static final Logger logger = LoggerFactory.getLogger(CoreFilter.class);
     private static final String DEFAULT_CHARSET = "UTF-8";
     
+    private static ServletContext servletContext;
 
 
     public void init(FilterConfig filterConfig) throws ServletException {
         logger.info("CoreFilter Init");
+        servletContext = filterConfig.getServletContext();
+        FileUploadHelper.init(servletContext);
     }
 
 
@@ -43,6 +47,9 @@ public class CoreFilter implements Filter {
         request.setCharacterEncoding(DEFAULT_CHARSET);
         response.setCharacterEncoding(DEFAULT_CHARSET);
 
+        if(request.getRequestURI().equals("/favicon.ico")){
+            return;
+        }
         String path = getPath(request);
         Handler handler = DefaultRouterFactory.getHandler(request.getMethod(),path);
             if (handler!=null) {
@@ -54,6 +61,8 @@ public class CoreFilter implements Filter {
                 }
             }
     }
+
+
 
     /**
      * 得到路径

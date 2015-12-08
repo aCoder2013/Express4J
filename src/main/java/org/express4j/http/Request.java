@@ -1,15 +1,14 @@
 package org.express4j.http;
 
+import org.express4j.multipart.FileUploadHelper;
+import org.express4j.multipart.MultipartFile;
 import org.express4j.utils.IOUtils;
 import org.express4j.utils.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Song on 2015/12/4.
@@ -18,7 +17,7 @@ public class Request {
 
     private final HttpServletRequest servletRequest;
 
-    private Map<String,String> params = new HashMap<>();
+    private RequestParam params = new RequestParam();
 
     private boolean paramParsed = false;
 
@@ -144,16 +143,49 @@ public class Request {
     /**
      * @return the params collection
      */
-    public Map<String,String> params(){
+    public RequestParam params(){
+        checkIfParsed();
+        return params;
+    }
+
+    /**
+     * 检查参数是否已经解析
+     * 如果没有的话，则根据表单类型进行解析
+     */
+    private void checkIfParsed() {
         if(!paramParsed){
-            Enumeration<String> parameterNames = servletRequest.getParameterNames();
-            while(parameterNames.hasMoreElements()){
-                String name = parameterNames.nextElement();
-                String value = servletRequest.getParameter(name);
-                params.put(name,value);
+            //如果表单类型为multipart/form-data
+            if (FileUploadHelper.isMultipart(servletRequest)) {
+                FileUploadHelper.createMultipartForm(params, servletRequest);
+            }else{
+                Enumeration<String> parameterNames = servletRequest.getParameterNames();
+                while(parameterNames.hasMoreElements()){
+                    String name = parameterNames.nextElement();
+                    String value = servletRequest.getParameter(name);
+                    params.addRegularField(name, value);
+                }
             }
         }
-        return Collections.unmodifiableMap(params);
+    }
+
+    public MultipartFile getFile(String name){
+        if(!FileUploadHelper.isMultipart(servletRequest)){
+            return null;
+        }
+        if(!paramParsed){
+            FileUploadHelper.createMultipartForm(params,servletRequest);
+        }
+        return params.getFile(name);
+    }
+
+    public List<MultipartFile> getFiles(String name){
+        if(!FileUploadHelper.isMultipart(servletRequest)){
+            return null;
+        }
+        if(!paramParsed){
+            FileUploadHelper.createMultipartForm(params,servletRequest);
+        }
+        return params.getFiles(name);
     }
 
     /**
