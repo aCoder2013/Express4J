@@ -78,6 +78,23 @@ public final class Express4J {
     }
 
 
+    /**
+     * 匹配HTTP PUT 请求
+     * @param path
+     * @param handler
+     */
+    public static void put(String path,Handler handler){
+        DefaultRouterFactory.addRouter("PUT",path, handler);
+    }
+
+    /**
+     * 匹配HTTP DELETE 请求
+     * @param path
+     * @param handler
+     */
+    public static void delete(String path,Handler handler){
+        DefaultRouterFactory.addRouter("DELETE",path, handler);
+    }
 
     /**
      * 启动应用
