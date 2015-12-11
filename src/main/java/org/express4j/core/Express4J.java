@@ -110,6 +110,9 @@ public final class Express4J{
         JettyServer.start();
     }
 
+    /**
+     * 停止应用
+     */
     public static void stop(){
         JettyServer.stop();
     }
