@@ -2,6 +2,7 @@ package org.express4j.core;
 
 import org.express4j.annotation.ExceptionHandler;
 import org.express4j.annotation.ExceptionInterceptor;
+import org.express4j.annotation.ResponseStatus;
 import org.express4j.utils.ClassUtils;
 
 import java.lang.reflect.Method;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 public class InterceptorScanner {
 
     private  Set<Class<?>> intercetporSet = new HashSet<>();
-    private  Map<Class<?>,ClassAndMethod> methodMap = new HashMap<>();
+    private  Map<Class<?>,ExceptionHandlerWrapper> methodMap = new HashMap<>();
 
     public void init() {
         loadInterceptorClass();
@@ -28,7 +29,11 @@ public class InterceptorScanner {
                     if(m.isAnnotationPresent(ExceptionHandler.class)){
                         ExceptionHandler handler = m.getAnnotation(ExceptionHandler.class);
                         Class<?> exceptionClass = handler.value();
-                        methodMap.put(exceptionClass,new ClassAndMethod(cls,m));
+                        if(m.isAnnotationPresent(ResponseStatus.class)){
+                            ResponseStatus responseStatusClass = m.getAnnotation(ResponseStatus.class);
+                            int code = responseStatusClass.value();
+                            methodMap.put(exceptionClass,new ExceptionHandlerWrapper(cls,m,code));
+                        }
                     }
                 }
             }
@@ -49,17 +54,32 @@ public class InterceptorScanner {
         return intercetporSet;
     }
 
-    public  Map<Class<?>, ClassAndMethod> getMethodMap() {
+    public  Map<Class<?>, ExceptionHandlerWrapper> getMethodMap() {
         return methodMap;
     }
 
-    public class ClassAndMethod{
+    public class ExceptionHandlerWrapper {
         private Class aClass;
         private Method aMethod;
+        private int statusCode;
 
-        public ClassAndMethod(Class aClass, Method aMethod) {
+        public ExceptionHandlerWrapper(Class aClass, Method aMethod) {
             this.aClass = aClass;
             this.aMethod = aMethod;
+        }
+
+        public ExceptionHandlerWrapper(Class aClass, Method aMethod, int statusCode) {
+            this.aClass = aClass;
+            this.aMethod = aMethod;
+            this.statusCode = statusCode;
+        }
+
+        public int getStatusCode() {
+            return statusCode;
+        }
+
+        public void setStatusCode(int statusCode) {
+            this.statusCode = statusCode;
         }
 
         public Class getaClass() {

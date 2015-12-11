@@ -1,8 +1,13 @@
 package exception;
 
 import controller.UserNotFoundException;
+import model.User;
 import org.express4j.annotation.ExceptionHandler;
 import org.express4j.annotation.ExceptionInterceptor;
+import org.express4j.annotation.ResponseStatus;
+import org.express4j.http.HttpStatusCode;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by Song on 2015/12/11.
@@ -11,9 +16,10 @@ import org.express4j.annotation.ExceptionInterceptor;
 public class GlobalExceptionHandler {
 
 
+    @ResponseStatus(HttpStatusCode.ACCEPTED)
     @ExceptionHandler(UserNotFoundException.class)
-    public void handlerUserNotFoundException(){
-        System.out.println("哈哈handlerUserNotFoundException");
+    public User handlerUserNotFoundException(HttpServletRequest request,UserNotFoundException e){
+        return new User(request.getRequestURI(),23,e.toString());
     }
 
     @ExceptionHandler(RuntimeException.class)

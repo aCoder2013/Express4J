@@ -5,6 +5,7 @@ import org.express4j.http.Request;
 import org.express4j.http.Response;
 import org.express4j.http.mapping.RequestMappingFactory;
 import org.express4j.multipart.FileUploadHelper;
+import org.express4j.utils.JsonUtils;
 import org.express4j.webserver.JettyServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Core Filter
@@ -33,6 +36,10 @@ public class CoreFilter implements Filter {
 
     private InterceptorScanner interceptorScanner = new InterceptorScanner();
 
+    private HttpServletRequest request ;
+
+    private HttpServletResponse response;
+
     public void init(FilterConfig filterConfig) throws ServletException {
         logger.info("CoreFilter Init");
         servletContext = filterConfig.getServletContext();
@@ -45,8 +52,8 @@ public class CoreFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         //向下转型
-        HttpServletRequest request = (HttpServletRequest) req;
-        HttpServletResponse response = (HttpServletResponse) res;
+        request = (HttpServletRequest) req;
+        response = (HttpServletResponse) res;
         //设置编码
         request.setCharacterEncoding(DEFAULT_CHARSET);
         response.setCharacterEncoding(DEFAULT_CHARSET);
@@ -70,21 +77,48 @@ public class CoreFilter implements Filter {
      * @param e
      */
     private void handleException(Exception e) {
+        Object result = null;
         if (interceptorScanner.getMethodMap().containsKey(e.getClass())) {
             try {
-                Object obj = interceptorScanner.getMethodMap().get(e.getClass()).getaClass().newInstance();
-                Method method = interceptorScanner.getMethodMap().get(e.getClass()).getaMethod();
-                method.invoke(obj);
+                InterceptorScanner.ExceptionHandlerWrapper handlerWrapper = interceptorScanner.getMethodMap().get(e.getClass());
+                Object obj = handlerWrapper.getaClass().newInstance();
+                Method method = handlerWrapper.getaMethod();
+                int code = handlerWrapper.getStatusCode();
+                List<?> parameters  = constructParameters(e, method);
+                result = method.invoke(obj,parameters.toArray());
+                response.sendError(code, JsonUtils.toJson(result));
             } catch (InstantiationException e1) {
                 e1.printStackTrace();
             } catch (IllegalAccessException e1) {
                 e1.printStackTrace();
             } catch (InvocationTargetException e1) {
                 e1.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
         }else {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 构造方法参数
+     * @param e
+     * @param method
+     * @return
+     */
+    private List<?> constructParameters(Exception e, Method method) {
+        List paramList = new ArrayList<>();
+        for(Class<?> cls :method.getParameterTypes()){
+            if(HttpServletRequest.class.isAssignableFrom(cls)){
+                paramList.add(request);
+            }else if(HttpServletResponse.class.isAssignableFrom(cls)){
+                paramList.add(response);
+            }else if (Exception.class.isAssignableFrom(cls)){
+                paramList.add(e);
+            }
+        }
+        return paramList;
     }
 
 

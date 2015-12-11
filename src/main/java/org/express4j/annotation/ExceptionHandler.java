@@ -13,6 +13,4 @@ import java.lang.annotation.Target;
 public @interface ExceptionHandler {
 
     Class<? extends Exception> value();
-
-    boolean defaultHandler()default false;
 }
