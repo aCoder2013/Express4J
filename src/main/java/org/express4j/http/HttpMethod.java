@@ -5,5 +5,5 @@ package org.express4j.http;
  */
 public enum  HttpMethod {
 
-    GET,POST
+    GET,POST,PUT,DELETE
 }

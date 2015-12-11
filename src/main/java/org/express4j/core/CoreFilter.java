@@ -3,8 +3,8 @@ package org.express4j.core;
 import org.express4j.handler.Handler;
 import org.express4j.http.Request;
 import org.express4j.http.Response;
-import org.express4j.multipart.FileUploadHelper;
 import org.express4j.http.mapping.RequestMappingFactory;
+import org.express4j.multipart.FileUploadHelper;
 import org.express4j.webserver.JettyServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +14,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Core Filter
@@ -29,11 +31,13 @@ public class CoreFilter implements Filter {
     
     private static ServletContext servletContext;
 
+    private InterceptorScanner interceptorScanner = new InterceptorScanner();
 
     public void init(FilterConfig filterConfig) throws ServletException {
         logger.info("CoreFilter Init");
         servletContext = filterConfig.getServletContext();
         FileUploadHelper.init(servletContext);
+        interceptorScanner.init();
     }
 
 
@@ -56,12 +60,32 @@ public class CoreFilter implements Filter {
                 try {
                     handler.handle(new Request(request),new Response(response));
                 } catch (Exception e) {
-                    logger.error("Execute Handler Failure",e);
-                    throw new RuntimeException(e);
+                    handleException(e);
                 }
             }
     }
 
+    /**
+     * 处理异常
+     * @param e
+     */
+    private void handleException(Exception e) {
+        if (interceptorScanner.getMethodMap().containsKey(e.getClass())) {
+            try {
+                Object obj = interceptorScanner.getMethodMap().get(e.getClass()).getaClass().newInstance();
+                Method method = interceptorScanner.getMethodMap().get(e.getClass()).getaMethod();
+                method.invoke(obj);
+            } catch (InstantiationException e1) {
+                e1.printStackTrace();
+            } catch (IllegalAccessException e1) {
+                e1.printStackTrace();
+            } catch (InvocationTargetException e1) {
+                e1.printStackTrace();
+            }
+        }else {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     /**
