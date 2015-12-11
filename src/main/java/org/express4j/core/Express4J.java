@@ -1,7 +1,7 @@
 package org.express4j.core;
 
 import org.express4j.handler.Handler;
-import org.express4j.router.DefaultRouterFactory;
+import org.express4j.http.mapping.RequestMappingFactory;
 import org.express4j.webserver.JettyServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,12 +9,13 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by Song on 2015/12/4.
  */
-public final class Express4J {
+public final class Express4J{
 
 
     private Logger logger = LoggerFactory.getLogger(Express4J.class);
     
     private static final Express4J INSTANCE = new Express4J();
+
 
 
 
@@ -58,43 +59,48 @@ public final class Express4J {
         Express4JConfig.setServerPort(port);
     }
 
-
     /**
      * 匹配HTTP GET 请求
+     *
      * @param path
      * @param handler
      */
-    public static void get(String path,Handler handler){
-        DefaultRouterFactory.addRouter("GET",path,handler);
+    public static void get(String path, Handler handler) {
+        RequestMappingFactory.addMapping("GET", path, handler);
     }
 
     /**
      * 匹配HTTP POST 请求
+     *
      * @param path
      * @param handler
      */
-    public static void post(String path,Handler handler){
-        DefaultRouterFactory.addRouter("POST",path,handler);
+    public static void post(String path, Handler handler) {
+        RequestMappingFactory.addMapping("POST", path, handler);
     }
 
 
     /**
      * 匹配HTTP PUT 请求
+     *
      * @param path
      * @param handler
      */
-    public static void put(String path,Handler handler){
-        DefaultRouterFactory.addRouter("PUT",path, handler);
+    public static void put(String path, Handler handler) {
+        RequestMappingFactory.addMapping("PUT", path, handler);
     }
 
     /**
      * 匹配HTTP DELETE 请求
+     *
      * @param path
      * @param handler
      */
-    public static void delete(String path,Handler handler){
-        DefaultRouterFactory.addRouter("DELETE",path, handler);
+    public static void delete(String path, Handler handler) {
+        RequestMappingFactory.addMapping("DELETE", path, handler);
     }
+
+
 
     /**
      * 启动应用
@@ -102,6 +108,10 @@ public final class Express4J {
     public static void run(){
         JettyServer.setServerPort(Express4JConfig.getServerPort());
         JettyServer.start();
+    }
+
+    public static void stop(){
+        JettyServer.stop();
     }
 
 

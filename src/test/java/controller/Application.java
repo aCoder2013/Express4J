@@ -1,7 +1,9 @@
 package controller;
 
 import model.User;
+import org.express4j.core.Express4J;
 import org.express4j.http.HttpStatusCode;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -41,6 +43,11 @@ public class Application {
             response.set("name", "小明");
             response.send("index.ftl");
         });
+
+        get("/error",(request, response) ->
+            response.sendError(HttpStatusCode.ACCEPTED,"Access ACCEPTED")
+        );
+
         serverPort(9000);
         run();
         setBaseUrl("http://localhost:9000");
@@ -66,5 +73,17 @@ public class Application {
         assertTextPresent("Hello 小明");
     }
 
+
+    @Test
+    public void errorTest(){
+        beginAt("/error");
+        assertResponseCode(HttpStatusCode.ACCEPTED);
+        assertTextPresent("Access ACCEPTED");
+    }
+
+    @AfterClass
+    public static void destory(){
+        Express4J.stop();
+    }
 
 }

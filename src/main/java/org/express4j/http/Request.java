@@ -7,6 +7,7 @@ import org.express4j.utils.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
@@ -31,6 +32,7 @@ public class Request {
     private Map<String,String> cookieMap = new HashMap<>();
 
     private boolean cookieParsed = false;
+
 
     public Request(HttpServletRequest request) {
         this.servletRequest = request;
@@ -147,6 +149,97 @@ public class Request {
         checkIfParsed();
         return params;
     }
+
+    /**
+     * Returns the session ID specified by the client. This may
+     * not be the same as the ID of the current valid session
+     * for this request.
+     * If the client did not specify a session ID, this method returns
+     * <code>null</code>.
+     *
+     * @return		a <code>String</code> specifying the session
+     *			ID, or <code>null</code> if the request did
+     *			not specify a session ID
+     */
+    public String getRequestedSessionId(){
+        return servletRequest.getRequestedSessionId();
+    }
+
+
+    /**
+     * Returns the current session associated with this request,
+     * or if the request does not have a session, creates one.
+     *
+     * @return		the <code>HttpSession</code> associated
+     *			with this request
+     */
+    public HttpSession session(){
+        return servletRequest.getSession();
+    }
+
+    /**
+     * Change the session id of the current session associated with this
+     * request and return the new session id.
+     *
+     * @return the new session id
+     *
+     * @throws IllegalStateException if there is no session associated
+     * with the request
+     *
+     * @since Servlet 3.1
+     */
+    public String changeSessionId(){
+        return servletRequest.changeSessionId();
+    }
+
+
+    /**
+     * Checks whether the requested session ID is still valid.
+     *
+     * <p>If the client did not specify any session ID, this method returns
+     * <code>false</code>.
+     *
+     * @return			<code>true</code> if this
+     *				request has an id for a valid session
+     *				in the current session context;
+     *				<code>false</code> otherwise
+     *
+     * @see			#getRequestedSessionId
+     * @see			#session()
+     */
+    public boolean isRequestedSessionIdValid(){
+        return servletRequest.isRequestedSessionIdValid();
+    }
+
+    /**
+     * Checks whether the requested session ID came in as a cookie.
+     *
+     * @return			<code>true</code> if the session ID
+     *				came in as a
+     *				cookie; otherwise, <code>false</code>
+     *
+     * @see         #session()
+     */
+    public boolean isRequestedSessionIdFromCookie(){
+        return servletRequest.isRequestedSessionIdFromCookie();
+    }
+
+    /**
+     * Checks whether the requested session ID came in as part of the
+     * request URL.
+     *
+     * @return			<code>true</code> if the session ID
+     *				came in as part of a URL; otherwise,
+     *				<code>false</code>
+     *
+     * @see         #session()
+     */
+    public boolean isRequestedSessionIdFromURL(){
+        return servletRequest.isRequestedSessionIdFromURL();
+    }
+
+
+
 
     /**
      * 检查参数是否已经解析

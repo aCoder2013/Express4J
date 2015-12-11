@@ -4,7 +4,7 @@ import org.express4j.handler.Handler;
 import org.express4j.http.Request;
 import org.express4j.http.Response;
 import org.express4j.multipart.FileUploadHelper;
-import org.express4j.router.DefaultRouterFactory;
+import org.express4j.http.mapping.RequestMappingFactory;
 import org.express4j.webserver.JettyServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ public class CoreFilter implements Filter {
             return;
         }
         String path = getPath(request);
-        Handler handler = DefaultRouterFactory.getHandler(request.getMethod(),path);
+        Handler handler = RequestMappingFactory.getHandler(request.getMethod(), path);
             if (handler!=null) {
                 try {
                     handler.handle(new Request(request),new Response(response));

@@ -24,9 +24,16 @@
         <processorPath useClasspath="true" />
         <module name="express4j" />
       </profile>
+      <profile default="false" name="Annotation profile for Express4J-Test" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="express4j" target="1.8" />
+      <module name="Express4J-Test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

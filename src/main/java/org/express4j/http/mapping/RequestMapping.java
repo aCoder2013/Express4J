@@ -1,15 +1,15 @@
-package org.express4j.router;
+package org.express4j.http.mapping;
 
 /**
  * Created by Song on 2015/12/4.
  */
-public class Router {
+public class RequestMapping {
 
     private String method ;
 
     private String path;
 
-    public Router(String method, String path) {
+    public RequestMapping(String method, String path) {
         this.method = method;
         this.path = path;
     }
@@ -35,10 +35,10 @@ public class Router {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Router router = (Router) o;
+        RequestMapping requestMapping = (RequestMapping) o;
 
-        if (method != null ? !method.equals(router.method) : router.method != null) return false;
-        return !(path != null ? !path.equals(router.path) : router.path != null);
+        if (method != null ? !method.equals(requestMapping.method) : requestMapping.method != null) return false;
+        return !(path != null ? !path.equals(requestMapping.path) : requestMapping.path != null);
 
     }
 

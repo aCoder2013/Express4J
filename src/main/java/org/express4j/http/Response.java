@@ -135,8 +135,91 @@ public class Response {
         FreemarkerRender.render(path, models, getWriter());
     }
 
-    public void redirect(String path){
-        //todo
+    /**
+     * Sends an error response to the client using the specified
+     * status and clears the buffer.  The server defaults to creating the
+     * response to look like an HTML-formatted server error page
+     * containing the specified message, setting the content type
+     * to "text/html". The server will preserve cookies and may clear or
+     * update any headers needed to serve the error page as a valid response.
+     *
+     * If an error-page declaration has been made for the web application
+     * corresponding to the status code passed in, it will be served back in
+     * preference to the suggested msg parameter and the msg parameter will
+     * be ignored.
+     *
+     * <p>If the response has already been committed, this method throws
+     * an IllegalStateException.
+     * After using this method, the response should be considered
+     * to be committed and should not be written to.
+     *
+     * @param	sc	the error status code
+     * @param	msg	the descriptive message
+     * @exception	IOException	If an input or output exception occurs
+     * @exception	IllegalStateException	If the response was committed
+     */
+    public void sendError(int sc, String msg) throws IOException{
+        servletResponse.sendError(sc, msg);
+    }
+
+    /**
+     * Sends an error response to the client using the specified status
+     * code and clears the buffer.
+     *
+     * The server will preserve cookies and may clear or
+     * update any headers needed to serve the error page as a valid response.
+     *
+     * If an error-page declaration has been made for the web application
+     * corresponding to the status code passed in, it will be served back
+     * the error page
+     *
+     * <p>If the response has already been committed, this method throws
+     * an IllegalStateException.
+     * After using this method, the response should be considered
+     * to be committed and should not be written to.
+     *
+     * @param	sc	the error status code
+     * @exception	IOException	If an input or output exception occurs
+     * @exception	IllegalStateException	If the response was committed
+     *						before this method call
+     */
+    public void sendError(int sc) throws IOException{
+        servletResponse.sendError(sc);
+    }
+
+    /**
+     * Sends a temporary redirect response to the client using the
+     * specified redirect location URL and clears the buffer. The buffer will
+     * be replaced with the data set by this method. Calling this method sets the
+     * status code to {@link #SC_FOUND} 302 (Found).
+     * This method can accept relative URLs;the servlet container must convert
+     * the relative URL to an absolute URL
+     * before sending the response to the client. If the location is relative
+     * without a leading '/' the container interprets it as relative to
+     * the current request URI. If the location is relative with a leading
+     * '/' the container interprets it as relative to the servlet container root.
+     * If the location is relative with two leading '/' the container interprets
+     * it as a network-path reference (see
+     * <a href="http://www.ietf.org/rfc/rfc3986.txt">
+     * RFC 3986: Uniform Resource Identifier (URI): Generic Syntax</a>, section 4.2
+     * &quot;Relative Reference&quot;).
+     *
+     * <p>If the response has already been committed, this method throws
+     * an IllegalStateException.
+     * After using this method, the response should be considered
+     * to be committed and should not be written to.
+     *
+     * @param		location	the redirect location URL
+     * @exception	IOException	If an input or output exception occurs
+     * @exception	IllegalStateException	If the response was committed or
+     *              if a partial URL is given and cannot be converted into a valid URL
+     */
+    public void redirect(String location){
+        try {
+            servletResponse.sendRedirect(location);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
