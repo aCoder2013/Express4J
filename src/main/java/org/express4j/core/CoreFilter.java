@@ -1,10 +1,12 @@
 package org.express4j.core;
 
+import org.apache.commons.io.IOUtils;
 import org.express4j.handler.Handler;
 import org.express4j.http.Request;
 import org.express4j.http.Response;
 import org.express4j.http.mapping.RequestMappingFactory;
 import org.express4j.multipart.FileUploadHelper;
+import org.express4j.utils.ClassUtils;
 import org.express4j.utils.JsonUtils;
 import org.express4j.webserver.JettyServer;
 import org.slf4j.Logger;
@@ -14,7 +16,9 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -51,16 +55,12 @@ public class CoreFilter implements Filter {
 
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        //向下转型
-        request = (HttpServletRequest) req;
-        response = (HttpServletResponse) res;
-        //设置编码
-        request.setCharacterEncoding(DEFAULT_CHARSET);
-        response.setCharacterEncoding(DEFAULT_CHARSET);
+        setUp((HttpServletRequest) req, (HttpServletResponse) res);
 
         if(request.getRequestURI().equals("/favicon.ico")){
             return;
         }
+
         String path = getPath(request);
         Handler handler = RequestMappingFactory.getHandler(request.getMethod(), path);
             if (handler!=null) {
@@ -69,7 +69,23 @@ public class CoreFilter implements Filter {
                 } catch (Exception e) {
                     handleException(e);
                 }
+            }else {
+                if(path.startsWith("http")){
+                    response.sendRedirect(path);
+                }else {
+                    String resourcePath = ClassUtils.getResourcePath(Express4JConfig.getStaticFilePath()+path);
+                    IOUtils.copy(new FileInputStream(resourcePath),response.getOutputStream());
+                }
             }
+    }
+
+    private void setUp(HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException {
+        //向下转型
+        request = req;
+        response = res;
+        //设置编码
+        request.setCharacterEncoding(DEFAULT_CHARSET);
+        response.setCharacterEncoding(DEFAULT_CHARSET);
     }
 
     /**

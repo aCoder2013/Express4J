@@ -78,7 +78,6 @@ public class Application {
     @Test
     public void errorTest() {
         beginAt("/error");
-        System.out.println(getServerResponse());
         assertResponseCode(HttpStatusCode.ACCEPTED);
         assertTextPresent("{\"name\":\"/error\",\"age\":23,\"password\":\"controller.UserNotFoundException\"}");
     }

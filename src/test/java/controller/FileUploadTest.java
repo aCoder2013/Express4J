@@ -8,6 +8,11 @@ import static org.express4j.core.Express4J.*;
 public class FileUploadTest {
 
     public static void main(String args[]){
+
+        get("/index",(request1, response) ->{
+            response.set("name","Mars");
+            response.send("index.ftl");
+        });
         get("/file",(request, response) -> response.send("file.ftl"));
 
         post("/process",(request, response) -> {
