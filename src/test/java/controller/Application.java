@@ -49,8 +49,11 @@ public class Application {
 //            response.sendError(HttpStatusCode.ACCEPTED, "Access ACCEPTED");
         });
 
-        serverPort(9000);
-        run();
+        get("/news/:id/",(request, response) -> {
+            response.renderText("Hello");
+        });
+
+        listen(9000).run();
         setBaseUrl("http://localhost:9000");
     }
 
@@ -60,6 +63,12 @@ public class Application {
         assertTextPresent("Hello World");
     }
 
+
+    @Test
+    public void id(){
+        beginAt("/news/12/");
+        assertTextPresent("Hello");
+    }
     @Test
     public void json() {
         beginAt("/testjson");

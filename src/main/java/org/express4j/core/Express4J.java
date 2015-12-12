@@ -55,8 +55,9 @@ public final class Express4J{
      * 设置服务器监听端口
      * @param port
      */
-    public static void serverPort(int port){
+    public static Express4J listen(int port){
         Express4JConfig.setServerPort(port);
+        return INSTANCE;
     }
 
     /**

@@ -39,7 +39,6 @@ public class RequestMapping {
 
         if (method != null ? !method.equals(requestMapping.method) : requestMapping.method != null) return false;
         return !(path != null ? !path.equals(requestMapping.path) : requestMapping.path != null);
-
     }
 
     @Override
