@@ -1,10 +1,14 @@
 package org.express4j.core;
 
+import org.express4j.annotation.RequestMapping;
 import org.express4j.handler.Handler;
 import org.express4j.http.mapping.RequestMappingFactory;
 import org.express4j.webserver.JettyServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * Created by Song on 2015/12/4.
@@ -16,6 +20,7 @@ public final class Express4J{
     
     private static final Express4J INSTANCE = new Express4J();
 
+    private static String prefixPath = "";
 
 
 
@@ -58,6 +63,52 @@ public final class Express4J{
     public static Express4J listen(int port){
         Express4JConfig.setServerPort(port);
         return INSTANCE;
+    }
+
+    /**
+     *  设置路由前缀
+     * @param prefix
+     * @return
+     */
+    public static Express4J route(String prefix){
+        prefixPath = prefix;
+        return Express4J.getInstance();
+    }
+
+    /**
+     * 设置要解析的控制器
+     * @param cls
+     * @return
+     */
+    public static Express4J with(Class<?> cls){
+        parseHandler(cls);
+        return getInstance();
+    }
+
+    /**
+     * 解析给定Class中的所有方法
+     * @param cls
+     */
+    private static void parseHandler(Class<?> cls) {
+        try {
+            Object instance = cls.newInstance();
+            Method[] methods = cls.getMethods();
+            for(Method method :methods){
+                if(method.isAnnotationPresent(RequestMapping.class)){
+                    RequestMapping pathClass = method.getAnnotation(RequestMapping.class);
+                    String path = pathClass.value();//得到路径
+                    String httpMethod = pathClass.method().name();
+                    Handler handler = (Handler) method.invoke(instance);
+                    RequestMappingFactory.addMapping(httpMethod, prefixPath+path, handler);
+                }
+            }
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

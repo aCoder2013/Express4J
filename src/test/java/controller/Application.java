@@ -54,11 +54,21 @@ public class Application {
         });
 
         get("/news/:id/detail/:detailId",(request, response) -> {
-            response.renderText(request.getPathVariable("id")+":"+request.getPathVariable("detailId"));
+            response.renderText(request.pathParam("id")+":"+request.pathParam("detailId"));
         });
+
+        get("/blogs/:year/:month/:day/:title",(request, response) ->
+                System.out.println(request.pathParams())
+        );
+
 
         listen(9000).run();
         setBaseUrl("http://localhost:9000");
+    }
+
+    @Test
+    public void blog(){
+        beginAt("/blogs/1994/07/16/Google回归");
     }
 
     @Test

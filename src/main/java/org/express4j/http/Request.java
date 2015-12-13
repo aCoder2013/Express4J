@@ -151,8 +151,16 @@ public class Request {
      * @param name
      * @return
      */
-    public String getPathVariable(String name) {
+    public String pathParam(String name) {
         return pathVariable.get(name);
+    }
+
+    /**
+     * 以Map形式返回所有的路径参数
+     * @return
+     */
+    public Map<String,String> pathParams(){
+        return pathVariable;
     }
 
     /**
