@@ -49,6 +49,10 @@ public class Application {
 //            response.sendError(HttpStatusCode.ACCEPTED, "Access ACCEPTED");
         });
 
+        get("/exception",(request, response) ->{
+            throw new ParamConflictException();
+        });
+
         get("/news/:id/detail/:detailId",(request, response) -> {
             response.renderText(request.getPathVariable("id")+":"+request.getPathVariable("detailId"));
         });
@@ -68,6 +72,11 @@ public class Application {
     public void id(){
         beginAt("/news/12/detail/12a");
         assertTextPresent("12:12a");
+    }
+
+    @Test
+    public void exception(){
+        beginAt("/exception");
     }
 
     @Test

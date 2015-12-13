@@ -65,10 +65,10 @@ public class CoreFilter implements Filter {
         Handler handler = RequestMappingFactory.getHandler(request.getMethod(), path);
         if (handler != null) {
             try {
-                handler.handle(RequestFactory.getRequest(),ResponseFactory.getResponse());
+                handler.handle(RequestFactory.getRequest(), ResponseFactory.getResponse());
             } catch (Exception e) {
                 handleException(e);
-            }finally{
+            } finally {
                 RequestFactory.remove();
                 ResponseFactory.remove();
             }
@@ -98,9 +98,12 @@ public class CoreFilter implements Filter {
      */
     private void handleException(Exception e) {
         Object result = null;
-        if (interceptorScanner.getMethodMap().containsKey(e.getClass())) {
+        InterceptorScanner.ExceptionHandlerWrapper handlerWrapper = interceptorScanner.getMethodMap().get(e.getClass());
+        if (handlerWrapper == null) {
+            handlerWrapper = interceptorScanner.getMethodMap().get(Exception.class);
+        }
+        if (handlerWrapper != null) {
             try {
-                InterceptorScanner.ExceptionHandlerWrapper handlerWrapper = interceptorScanner.getMethodMap().get(e.getClass());
                 Object obj = handlerWrapper.getaClass().newInstance();
                 Method method = handlerWrapper.getaMethod();
                 int code = handlerWrapper.getStatusCode();

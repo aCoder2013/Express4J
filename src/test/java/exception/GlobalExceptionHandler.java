@@ -27,9 +27,10 @@ public class GlobalExceptionHandler {
 
     }
 
-    @ExceptionHandler(IllegalAccessException.class)
-    public void handleIllegalAccessError(){
-
+    @ResponseStatus(HttpStatusCode.ACCEPTED)
+    @ExceptionHandler(Exception.class)
+    public void handleException(Exception e){
+        System.out.println(e.getClass().getName());
     }
 
 }
