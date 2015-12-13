@@ -1,9 +1,12 @@
 package org.express4j.http.mapping;
 
 import org.express4j.handler.Handler;
-import org.express4j.http.RequestFactory;
+import org.express4j.utils.PathMatchUtils;
+import org.express4j.utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,62 +14,48 @@ import java.util.Map;
  */
 public class RequestMappingFactory {
 
-    private static Map<RequestMapping,Handler> regularHandlerMap = new HashMap<>();
+    private static Map<RequestMapping, Handler> regularHandlerMap = new HashMap<>();
 
 
     public static void addMapping(String method, String path, Handler handler) {
-        if(!path.startsWith("/")){
+        if (!path.startsWith("/")) {
             return;
         }
-        if(path.endsWith("/")){
-            path = path.substring(0,path.length()-1);
+        if (path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
         }
-        if(handler==null){
+        if (handler == null) {
             return;
         }
         method = method.toUpperCase();//转换成大写
         regularHandlerMap.put(new RequestMapping(method, path), handler);
     }
 
-    public static Handler getHandler(String method,String path){
-        for(Map.Entry<RequestMapping,Handler> entries :regularHandlerMap.entrySet()){
+    public static Handler getHandler(String method, String path) {
+        List<String> matchedPath = new ArrayList<>();
+        for (Map.Entry<RequestMapping, Handler> entries : regularHandlerMap.entrySet()) {
             RequestMapping mapping = entries.getKey();
-            if(mapping.getMethod().equals(method.toUpperCase())){
-                if(matches(mapping.getPath(),path)){
-                    return entries.getValue();
+            if (mapping.getMethod().equals(method.toUpperCase())) {
+                if (PathMatchUtils.matches(mapping.getPath(), path)) {
+                    matchedPath.add(mapping.getPath());
                 }
             }
+        }
+        if (!matchedPath.isEmpty()) {
+            String bestPath = "";
+            for(String p : matchedPath){
+                if(p.length()==bestPath.length()){
+                    if(StringUtils.compute(p,'*')<StringUtils.compute(bestPath,'*')){
+                        bestPath = p;
+                    }
+                }
+                if(bestPath.length()<p.length()){
+                    bestPath = p;
+                }
+            }
+            return regularHandlerMap.get(new RequestMapping(method,bestPath));
         }
         return null;
-    }
-
-    private static boolean matches(String template,String path) {
-        String[] templatePathList =template.split("/");
-        String[] pathList=path.split("/");
-        if(templatePathList.length==pathList.length){
-            int length = templatePathList.length;
-            int i = 0;
-            while(i<length){
-                String partPath = pathList[i];
-                String partTemplatePath = templatePathList[i];
-                if(!partPath.equals(partTemplatePath) && !partTemplatePath.startsWith(":") && !partTemplatePath.equals("*")){
-                    return false;
-                }
-                i++;
-            }
-            int index = 0;
-            for (i = 0; i < templatePathList.length; i++) {
-                if(templatePathList[i].startsWith(":")){
-                    String name = templatePathList[i].substring(templatePathList[i].indexOf(":") + 1);
-                    String value = pathList[i];
-                    RequestFactory.getRequest().addPathVariable(name,value);
-                }else if (templatePathList[i].equals("*")){
-                    RequestFactory.getRequest().addPathVariable(""+index++,pathList[i]);
-                }
-            }
-            return true;
-        }
-        return false;
     }
 
 

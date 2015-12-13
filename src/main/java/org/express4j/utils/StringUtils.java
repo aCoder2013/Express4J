@@ -18,4 +18,14 @@ public class StringUtils {
         return cs == null || cs.length() == 0;
     }
 
+
+    public static int compute(String str,char ch){
+        int count = 0 ;
+        for(char c : str.toCharArray()){
+            if(c==ch){
+                count++;
+            }
+        }
+        return count;
+    }
 }

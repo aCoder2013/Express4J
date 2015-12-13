@@ -1,6 +1,8 @@
 package org.express4j.core;
 
 import org.apache.commons.io.IOUtils;
+import org.express4j.aop.AopFactory;
+import org.express4j.aop.Interceptor;
 import org.express4j.handler.Handler;
 import org.express4j.http.RequestFactory;
 import org.express4j.http.ResponseFactory;
@@ -63,9 +65,18 @@ public class CoreFilter implements Filter {
         RequestFactory.create(request);
         ResponseFactory.create(response);
         Handler handler = RequestMappingFactory.getHandler(request.getMethod(), path);
+        List<Interceptor> interceptors = AopFactory.getInterceptors(path);
         if (handler != null) {
             try {
+                if (interceptors!=null) {
+                    interceptors.stream()
+                            .forEach(interceptor -> interceptor.before(RequestFactory.getRequest(),ResponseFactory.getResponse(),handler));
+                }
                 handler.handle(RequestFactory.getRequest(), ResponseFactory.getResponse());
+                if (interceptors!=null) {
+                    interceptors.stream()
+                            .forEach(interceptor -> interceptor.after(RequestFactory.getRequest(), ResponseFactory.getResponse(), handler));
+                }
             } catch (Exception e) {
                 handleException(e);
             } finally {

@@ -1,6 +1,8 @@
 package org.express4j.core;
 
 import org.express4j.annotation.RequestMapping;
+import org.express4j.aop.AopFactory;
+import org.express4j.aop.Interceptor;
 import org.express4j.handler.Handler;
 import org.express4j.http.mapping.RequestMappingFactory;
 import org.express4j.webserver.JettyServer;
@@ -64,6 +66,17 @@ public final class Express4J{
         Express4JConfig.setServerPort(port);
         return INSTANCE;
     }
+
+
+    /**
+     * 向指定路径添加拦截器
+     * @param path
+     * @param interceptor
+     */
+    public static void addInterceptor(String path,Class<? extends Interceptor> ... interceptor){
+        AopFactory.addMapping(path,interceptor);
+    }
+
 
     /**
      *  设置路由前缀
