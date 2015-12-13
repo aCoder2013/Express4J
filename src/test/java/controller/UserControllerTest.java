@@ -16,8 +16,8 @@ public class UserControllerTest {
 
     @BeforeClass
     public static void init(){
-        Express4J.route("/news").with(NewsController.class);
-        Express4J.route("/user").with(UserController.class);
+        Express4J.controller("/news").with(NewsController.class);
+        Express4J.controller("/user").with(UserController.class);
         setBaseUrl("http://localhost:8080");
         Express4J.run();
     }

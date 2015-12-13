@@ -49,16 +49,19 @@ public class RequestMappingFactory {
             while(i<length){
                 String partPath = pathList[i];
                 String partTemplatePath = templatePathList[i];
-                if(!partPath.equals(partTemplatePath) && !partTemplatePath.startsWith(":")){
+                if(!partPath.equals(partTemplatePath) && !partTemplatePath.startsWith(":") && !partTemplatePath.equals("*")){
                     return false;
                 }
                 i++;
             }
+            int index = 0;
             for (i = 0; i < templatePathList.length; i++) {
                 if(templatePathList[i].startsWith(":")){
                     String name = templatePathList[i].substring(templatePathList[i].indexOf(":") + 1);
                     String value = pathList[i];
                     RequestFactory.getRequest().addPathVariable(name,value);
+                }else if (templatePathList[i].equals("*")){
+                    RequestFactory.getRequest().addPathVariable(""+index++,pathList[i]);
                 }
             }
             return true;

@@ -70,7 +70,7 @@ public final class Express4J{
      * @param prefix
      * @return
      */
-    public static Express4J route(String prefix){
+    public static Express4J controller(String prefix){
         prefixPath = prefix;
         return Express4J.getInstance();
     }
