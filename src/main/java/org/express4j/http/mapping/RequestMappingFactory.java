@@ -1,6 +1,7 @@
 package org.express4j.http.mapping;
 
 import org.express4j.handler.Handler;
+import org.express4j.http.RequestFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,10 +20,6 @@ public class RequestMappingFactory {
         }
         if(path.endsWith("/")){
             path = path.substring(0,path.length()-1);
-        }
-        if(path.contains(":")){
-            int colonIndex = path.indexOf(":");
-            int salash  = path.indexOf(colonIndex,'/');
         }
         if(handler==null){
             return;
@@ -56,6 +53,13 @@ public class RequestMappingFactory {
                     return false;
                 }
                 i++;
+            }
+            for (i = 0; i < templatePathList.length; i++) {
+                if(templatePathList[i].startsWith(":")){
+                    String name = templatePathList[i].substring(templatePathList[i].indexOf(":") + 1);
+                    String value = pathList[i];
+                    RequestFactory.getRequest().addPathVariable(name,value);
+                }
             }
             return true;
         }

@@ -49,8 +49,8 @@ public class Application {
 //            response.sendError(HttpStatusCode.ACCEPTED, "Access ACCEPTED");
         });
 
-        get("/news/:id/",(request, response) -> {
-            response.renderText("Hello");
+        get("/news/:id/detail/:detailId",(request, response) -> {
+            response.renderText(request.getPathVariable("id")+":"+request.getPathVariable("detailId"));
         });
 
         listen(9000).run();
@@ -66,9 +66,10 @@ public class Application {
 
     @Test
     public void id(){
-        beginAt("/news/12/");
-        assertTextPresent("Hello");
+        beginAt("/news/12/detail/12a");
+        assertTextPresent("12:12a");
     }
+
     @Test
     public void json() {
         beginAt("/testjson");
