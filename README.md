@@ -1,40 +1,17 @@
 # Express4J
-A [Express](http://expressjs.com/en/index.html) Style Java Web Framework .
-Here is a demonstrate:
+A [Express](http://expressjs.com/en/index.html)风格的JavaWeb框架.
+优雅且高效
+快速开始 :
 ```java
-get("/hello", (request, response) ->
-   response.renderHtml("<h1>Hello World</h1>")
-       );
+import static org.express4j.core.Express4J.*;
 
-get("/error",(request, response) ->
-    response.status(HttpStatusCode.BAD_REQUEST).renderText("Bad Request !"));
+public class HelloWorld {
 
-get("/testjson",(request, response) ->
-    response.json(new User("Mars",22,"123456789"))
-);
+    public static void main(String[] args) {
+        get("/hello",(req, res) ->res.renderHtml("Hello World"));
+        run();
+    }
+}
 
-get("/cookietest",(request, response) -> {
-    System.out.println(request.cookies());
-    response.renderHtml("<h1>"+request.cookie("blog")+"</h1>");
-});
-
-get("/setcookie",(request, response) ->{
-    response.cookie("dznews","interesting");
-    response.status(HttpStatusCode.OK).renderHtml("Success!");
-});
-
-
-get("/jsonp",(request, response) ->
-    response.jsonp("user",new User("Tommy",23,"1994-11-15"))
-);
-get("/index",(request, response) ->{
-    Father father = new Father("张无忌");
-    User user = new User("Mars",23,"13245674",father);
-    response.set("name","世界");
-    response.set("user",user);
-    response.send("index.ftl");
-});
-templatePath("freemarker");
-serverPort(80);
-run();      
+   
 ```
