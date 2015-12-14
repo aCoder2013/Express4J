@@ -1,8 +1,5 @@
 # Express4J
-A [Express](http://expressjs.com/en/index.html)风格的JavaWeb框架.
-<br>
-优雅且高效
-<br>
+A [Express](http://expressjs.com/en/index.html)风格的轻量级JavaWeb框架,优雅且高效,完全不存在大量的XML文件以及注解充斥你的项目
 快速开始 :
 ```java
 import static org.express4j.core.Express4J.*;
@@ -14,6 +11,4 @@ public class HelloWorld {
         run();
     }
 }
-
-   
 ```
