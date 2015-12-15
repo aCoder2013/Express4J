@@ -15,23 +15,54 @@ public class HelloWorld {
 ##基本概念
 1.  路由
 <br>
-支持通配符以及命名参数
+
 ```java
+    1.命名参数
     get("/news/:id/",(request, response) -> {
         response.renderText(request.pathParam("id")+":"+request.pathParam("detailId"));
     });
-
+    2.支持通配符
     get("/hello/*/to/*",(request, response) ->
         response.renderHtml("Hello "+request.pathParam("0")+" To "+request.pathParam("1")));
 ```
-2.  拦截器
+    同时路由支持模块化:
 ```java
 
-Express4J.get("/list/detail/*",(request1, response1) ->
-                System.out.println("list/detail/*")
-        );
 
-Express4J.addInterceptor("/list/*", LoginInterceptor.class);
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import static net.sourceforge.jwebunit.junit.JWebUnit.*;
+import static org.express4j.core.Express4J.controller;
+import static org.express4j.core.Express4J.run;
+
+public class UserControllerTest {
+    public static void main(String args[]){
+        controller("/user").with(UserController.class);
+        setBaseUrl("http://localhost:8080");
+        run();
+    }
+}
+
+public class UserController {
+
+
+
+    @RequestMapping(value = "/login",method = HttpMethod.GET)
+    public Handler login() {
+        return (request, response) -> {
+            response.renderHtml("Hello UserController");
+        };
+    }
+    //默认为GET方法
+    @RequestMapping("/register")
+    public Handler register(){
+        return (request, response) -> response.renderHtml("<h2>Register</h2>");
+    }
+}
+```
+2.  拦截器
+```java
 public class LoginInterceptor implements Interceptor{
 
     @Override
@@ -44,6 +75,27 @@ public class LoginInterceptor implements Interceptor{
     public boolean after(Request request, Response response, Object handler) {
         System.out.println("After");
         return false;
+    }
+}
+
+Express4J.get("/list/detail/*",(request1, response1) ->
+                System.out.println("list/detail/*")
+        );
+Express4J.addInterceptor("/list/*", LoginInterceptor.class);
+```
+3.  自定义异常处理
+```java
+        get("/error", (request, response) -> {
+            throw new UserNotFoundException();
+        });
+@ExceptionInterceptor
+public class GlobalExceptionHandler {
+
+
+    @ResponseStatus(HttpStatusCode.ACCEPTED)
+    @ExceptionHandler(UserNotFoundException.class)
+    public User handlerUserNotFoundException(HttpServletRequest request,UserNotFoundException e){
+        return new User(request.getRequestURI(),23,e.toString());
     }
 }
 ```
