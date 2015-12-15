@@ -13,26 +13,30 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * 拦截器扫描器
  * Created by Song on 2015/12/11.
  */
 public class InterceptorScanner {
 
-    private  Set<Class<?>> intercetporSet = new HashSet<>();
-    private  Map<Class<?>,ExceptionHandlerWrapper> methodMap = new HashMap<>();
+    private Set<Class<?>> intercetporSet = new HashSet<>();
+    private Map<Class<?>, ExceptionHandlerWrapper> methodMap = new HashMap<>();
 
+    /**
+     * 初始化方法
+     */
     public void init() {
         loadInterceptorClass();
-        if(!intercetporSet.isEmpty()){
-            for(Class<?> cls : intercetporSet){
+        if (!intercetporSet.isEmpty()) {
+            for (Class<?> cls : intercetporSet) {
                 Method[] methods = cls.getMethods();
-                for(Method m : methods){
-                    if(m.isAnnotationPresent(ExceptionHandler.class)){
+                for (Method m : methods) {
+                    if (m.isAnnotationPresent(ExceptionHandler.class)) {
                         ExceptionHandler handler = m.getAnnotation(ExceptionHandler.class);
                         Class<?> exceptionClass = handler.value();
-                        if(m.isAnnotationPresent(ResponseStatus.class)){
+                        if (m.isAnnotationPresent(ResponseStatus.class)) {
                             ResponseStatus responseStatusClass = m.getAnnotation(ResponseStatus.class);
                             int code = responseStatusClass.value();
-                            methodMap.put(exceptionClass,new ExceptionHandlerWrapper(cls,m,code));
+                            methodMap.put(exceptionClass, new ExceptionHandlerWrapper(cls, m, code));
                         }
                     }
                 }
@@ -50,14 +54,18 @@ public class InterceptorScanner {
                 .collect(Collectors.toList()));
     }
 
-    public  Set<Class<?>> getIntercetporSet() {
+    public Set<Class<?>> getIntercetporSet() {
         return intercetporSet;
     }
 
-    public  Map<Class<?>, ExceptionHandlerWrapper> getMethodMap() {
+    public Map<Class<?>, ExceptionHandlerWrapper> getMethodMap() {
         return methodMap;
     }
 
+
+    /**
+     * 封装异常处理器
+     */
     public class ExceptionHandlerWrapper {
         private Class aClass;
         private Method aMethod;

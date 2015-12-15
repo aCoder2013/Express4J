@@ -46,6 +46,8 @@ public class CoreFilter implements Filter {
 
     private HttpServletResponse response;
 
+    private String path;
+
     public void init(FilterConfig filterConfig) throws ServletException {
         logger.info("CoreFilter Init");
         servletContext = filterConfig.getServletContext();
@@ -61,22 +63,14 @@ public class CoreFilter implements Filter {
             return;
         }
 
-        String path = getPath(request);
-        RequestFactory.create(request);
-        ResponseFactory.create(response);
+
         Handler handler = RequestMappingFactory.getHandler(request.getMethod(), path);
         List<Interceptor> interceptors = AopFactory.getInterceptors(path);
         if (handler != null) {
             try {
-                if (interceptors!=null) {
-                    interceptors.stream()
-                            .forEach(interceptor -> interceptor.before(RequestFactory.getRequest(),ResponseFactory.getResponse(),handler));
-                }
+                executeBeforeHandler(handler, interceptors);
                 handler.handle(RequestFactory.getRequest(), ResponseFactory.getResponse());
-                if (interceptors!=null) {
-                    interceptors.stream()
-                            .forEach(interceptor -> interceptor.after(RequestFactory.getRequest(), ResponseFactory.getResponse(), handler));
-                }
+                executeAfterHandler(handler, interceptors);
             } catch (Exception e) {
                 handleException(e);
             } finally {
@@ -93,6 +87,38 @@ public class CoreFilter implements Filter {
         }
     }
 
+    /**
+     * 执行拦截器的before()方法
+     * @param handler
+     * @param interceptors
+     */
+    private void executeAfterHandler(Handler handler, List<Interceptor> interceptors) {
+        if (interceptors!=null) {
+            for(Interceptor interceptor :interceptors){
+                boolean continued = interceptor.after(RequestFactory.getRequest(), ResponseFactory.getResponse(), handler);
+                if(!continued){
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * 执行拦截器的after()方法
+     * @param handler
+     * @param interceptors
+     */
+    private void executeBeforeHandler(Handler handler, List<Interceptor> interceptors) {
+        if (interceptors!=null) {
+            for(Interceptor interceptor :interceptors){
+                boolean continued = interceptor.before(RequestFactory.getRequest(), ResponseFactory.getResponse(), handler);
+                if(!continued){
+                    break;
+                }
+            }
+        }
+    }
+
     private void setUp(HttpServletRequest req, HttpServletResponse res) throws UnsupportedEncodingException {
         //向下转型
         request = req;
@@ -100,6 +126,10 @@ public class CoreFilter implements Filter {
         //设置编码
         request.setCharacterEncoding(DEFAULT_CHARSET);
         response.setCharacterEncoding(DEFAULT_CHARSET);
+
+        path = getPath(request);
+        RequestFactory.create(request);
+        ResponseFactory.create(response);
     }
 
     /**

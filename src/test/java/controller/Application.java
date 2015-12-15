@@ -46,7 +46,6 @@ public class Application {
 
         get("/error", (request, response) -> {
             throw new UserNotFoundException();
-//            response.sendError(HttpStatusCode.ACCEPTED, "Access ACCEPTED");
         });
 
         get("/exception",(request, response) ->{

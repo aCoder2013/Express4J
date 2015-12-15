@@ -1,12 +1,11 @@
 package controller;
 
-import org.express4j.core.Express4J;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static net.sourceforge.jwebunit.junit.JWebUnit.assertTextPresent;
-import static net.sourceforge.jwebunit.junit.JWebUnit.beginAt;
-import static net.sourceforge.jwebunit.junit.JWebUnit.setBaseUrl;
+import static net.sourceforge.jwebunit.junit.JWebUnit.*;
+import static org.express4j.core.Express4J.controller;
+import static org.express4j.core.Express4J.run;
 
 /**
  * Created by Song on 2015/12/13.
@@ -16,10 +15,10 @@ public class UserControllerTest {
 
     @BeforeClass
     public static void init(){
-        Express4J.controller("/news").with(NewsController.class);
-        Express4J.controller("/user").with(UserController.class);
+        controller("/news").with(NewsController.class);
+        controller("/user").with(UserController.class);
         setBaseUrl("http://localhost:8080");
-        Express4J.run();
+        run();
     }
 
     @Test

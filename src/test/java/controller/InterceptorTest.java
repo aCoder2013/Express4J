@@ -22,7 +22,7 @@ public class InterceptorTest {
                 System.out.println("list/detail/*")
         );
 
-        Express4J.addInterceptor("/list/*", LoginInterceptor.class);
+        Express4J.addInterceptor("/list/*", LoginInterceptor.class,TestLoginInterceptor.class);
         Express4J.get("/list/*", (request, response) ->
                 System.out.println("list/*")
         );
@@ -66,19 +66,33 @@ public class InterceptorTest {
 
 
 
+    public static class TestLoginInterceptor implements Interceptor{
+
+        @Override
+        public boolean before(Request request, Response response, Object handler) {
+            System.out.println("Before TestLoginInterceptor");
+            return false;
+        }
+
+        @Override
+        public boolean after(Request request, Response response, Object handler) {
+            System.out.println("After TestLoginInterceptor");
+            return false;
+        }
+    }
 
     public static class LoginInterceptor implements Interceptor{
 
         @Override
         public boolean before(Request request, Response response, Object handler) {
             System.out.println("Before");
-            return false;
+            return true;
         }
 
         @Override
         public boolean after(Request request, Response response, Object handler) {
             System.out.println("After");
-            return false;
+            return true;
         }
     }
 }
