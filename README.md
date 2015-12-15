@@ -15,16 +15,21 @@ public class HelloWorld {
 ##基本概念
 ###路由
 <br>
-
-```java
 1.命名参数
+```java
 get("/news/:id/",(request, response) -> {
     response.renderText(request.pathParam("id")+":"+request.pathParam("detailId"));
 });
+```
+
 2.支持通配符
+```java
 get("/hello/*/to/*",(request, response) ->
     response.renderHtml("Hello "+request.pathParam("0")+" To "+request.pathParam("1")));
+```
+
 3.同时路由支持模块化:
+```java
 import org.junit.BeforeClass;
 import org.junit.Test;
 
