@@ -85,9 +85,9 @@ Express4J.addInterceptor("/list/*", LoginInterceptor.class);
 ```
 3.  自定义异常处理
 ```java
-        get("/error", (request, response) -> {
-            throw new UserNotFoundException();
-        });
+get("/error", (request, response) -> {
+    throw new UserNotFoundException();
+});
 @ExceptionInterceptor
 public class GlobalExceptionHandler {
 
