@@ -13,19 +13,17 @@ public class HelloWorld {
 }
 ```
 ##基本概念
-###路由
+1.  路由
 <br>
 
 ```java
-    1.命名参数
-    get("/news/:id/",(request, response) -> {
-        response.renderText(request.pathParam("id")+":"+request.pathParam("detailId"));
-    });
-    2.支持通配符
-    get("/hello/*/to/*",(request, response) ->
-        response.renderHtml("Hello "+request.pathParam("0")+" To "+request.pathParam("1")));
-```
-```java
+1.命名参数
+get("/news/:id/",(request, response) -> {
+    response.renderText(request.pathParam("id")+":"+request.pathParam("detailId"));
+});
+2.支持通配符
+get("/hello/*/to/*",(request, response) ->
+    response.renderHtml("Hello "+request.pathParam("0")+" To "+request.pathParam("1")));
 3.同时路由支持模块化:
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -59,7 +57,7 @@ public class UserController {
     }
 }
 ```
-###拦截器
+2.  拦截器
 ```java
 public class LoginInterceptor implements Interceptor{
 
@@ -81,7 +79,7 @@ Express4J.get("/list/detail/*",(request1, response1) ->
         );
 Express4J.addInterceptor("/list/*", LoginInterceptor.class);
 ```
-###自定义异常处理
+3.  自定义异常处理
 ```java
 get("/error", (request, response) -> {
     throw new UserNotFoundException();
