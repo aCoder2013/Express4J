@@ -1,6 +1,7 @@
 # Express4J
-以[Express](http://expressjs.com/en/index.html)为灵感的的轻量级JavaWeb框架,优雅且高效,完全不存在大量的XML文件以及注解
-#快速开始 :
+A Simple Java Web Framework inspired by [Express](http://expressjs.com/en/index.html),it's very easy to use and very suitable for
+rapid development
+#Quick Start :
 ```java
 import static org.express4j.core.Express4J.*;
 
@@ -12,23 +13,23 @@ public class HelloWorld {
     }
 }
 ```
-##基本概念
-###路由
+##Basic Concept
+###Route
 <br>
-1.命名参数
+1.Named Parameter
 ```java
 get("/news/:id/",(request, response) -> {
     response.renderText(request.pathParam("id")+":"+request.pathParam("detailId"));
 });
 ```
 
-2.支持通配符
+2.Wildcard 
 ```java
 get("/hello/*/to/*",(request, response) ->
     response.renderHtml("Hello "+request.pathParam("0")+" To "+request.pathParam("1")));
 ```
 
-3.同时路由支持模块化:
+3.Modularity:
 ```java
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -55,14 +56,14 @@ public class UserController {
             response.renderHtml("Hello UserController");
         };
     }
-    //默认为GET方法
+    //The default is the GET method
     @RequestMapping("/register")
     public Handler register(){
         return (request, response) -> response.renderHtml("<h2>Register</h2>");
     }
 }
 ```
-###拦截器
+##Interceptor
 ```java
 public class LoginInterceptor implements Interceptor{
 
@@ -84,7 +85,7 @@ Express4J.get("/list/detail/*",(request1, response1) ->
         );
 Express4J.addInterceptor("/list/*", LoginInterceptor.class);
 ```
-###自定义异常处理
+###Custom Exception Handler
 ```java
 get("/error", (request, response) -> {
     throw new UserNotFoundException();
