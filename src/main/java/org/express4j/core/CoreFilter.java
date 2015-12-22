@@ -134,7 +134,6 @@ public class CoreFilter implements Filter {
 
     /**
      * 处理异常
-     *
      * @param e
      */
     private void handleException(Exception e) {
@@ -207,6 +206,9 @@ public class CoreFilter implements Filter {
         return path;
     }
 
+    /**
+     * 清理资源
+     */
     public void destroy() {
         JettyServer.stop();
     }

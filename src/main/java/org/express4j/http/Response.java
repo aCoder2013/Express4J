@@ -101,7 +101,7 @@ public class Response {
         servletResponse.setHeader("Pragma", "no-cache");	// HTTP/1.0 caches might not implement Cache-Control and might only implement Pragma: no-cache
         servletResponse.setHeader("Cache-Control", "no-cache");
         servletResponse.setDateHeader("Expires", 0);
-        servletResponse.setContentType("application/json;charset=UTF-8");
+        servletResponse.setContentType(Http.CONTENT_TYPE_JSON);
         String json = JsonUtils.toJson(jsonContent);
         getWriter().write(json);
         getWriter().flush();
@@ -120,7 +120,7 @@ public class Response {
         servletResponse.setHeader("Pragma", "no-cache");	// HTTP/1.0 caches might not implement Cache-Control and might only implement Pragma: no-cache
         servletResponse.setHeader("Cache-Control", "no-cache");
         servletResponse.setDateHeader("Expires", 0);
-        servletResponse.setContentType("application/javascript");
+        servletResponse.setContentType(Http.CONTENT_TYPE_JAVASCRIPT);
         String json = JsonUtils.toJson(jsonContent);
         json = callback+"("+json+");";
         getWriter().write(json);
@@ -191,7 +191,7 @@ public class Response {
      * Sends a temporary redirect response to the client using the
      * specified redirect location URL and clears the buffer. The buffer will
      * be replaced with the data set by this method. Calling this method sets the
-     * status code to {@link #SC_FOUND} 302 (Found).
+     * status code to {@link HttpStatusCode.FOUND} 302 (Found).
      * This method can accept relative URLs;the servlet container must convert
      * the relative URL to an absolute URL
      * before sending the response to the client. If the location is relative
@@ -222,8 +222,10 @@ public class Response {
         }
     }
 
-
-
+    /**
+     * 发送静态文件
+     * @param path
+     */
     public void sendStaticFile(String path){
         //todo
     }
