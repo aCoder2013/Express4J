@@ -68,9 +68,9 @@ public class CoreFilter implements Filter {
         List<Interceptor> interceptors = AopFactory.getInterceptors(path);
         if (handler != null) {
             try {
-//                executeBeforeHandler(handler, interceptors);
+                executeBeforeHandler(handler, interceptors);
                 handler.handle(RequestFactory.getRequest(), ResponseFactory.getResponse());
-//                executeAfterHandler(handler, interceptors);
+                executeAfterHandler(handler, interceptors);
             } catch (Exception e) {
                 handleException(e);
             } finally {

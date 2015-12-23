@@ -12,7 +12,6 @@ public class HelloWorld {
 
     public static void main(String[] args) {
         get("/hello",(req, res) ->res.renderHtml("Hello World"));
-        run();
     }
 }
 ```
@@ -45,7 +44,6 @@ public class UserControllerTest {
     public static void main(String args[]){
         controller("/user").with(UserController.class);
         setBaseUrl("http://localhost:8080");
-        run();
     }
 }
 
