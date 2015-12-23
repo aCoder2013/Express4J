@@ -1,20 +1,29 @@
 package org.express4j.http;
 
+import org.apache.commons.io.IOUtils;
+import org.express4j.core.Express4JConfig;
 import org.express4j.render.FreemarkerRender;
+import org.express4j.utils.ClassUtils;
 import org.express4j.utils.JsonUtils;
 import org.express4j.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * HttpServletResponse包装类
  * Created by Song on 2015/12/4.
  */
 public class Response {
+
+    private static final Logger logger = LoggerFactory.getLogger(Response.class);
 
     private PrintWriter writer;
 
@@ -191,7 +200,7 @@ public class Response {
      * Sends a temporary redirect response to the client using the
      * specified redirect location URL and clears the buffer. The buffer will
      * be replaced with the data set by this method. Calling this method sets the
-     * status code to {@link HttpStatusCode.FOUND} 302 (Found).
+     * status code to {@link HttpStatusCode.302} 302 (Found).
      * This method can accept relative URLs;the servlet container must convert
      * the relative URL to an absolute URL
      * before sending the response to the client. If the location is relative
@@ -218,6 +227,7 @@ public class Response {
         try {
             servletResponse.sendRedirect(location);
         } catch (IOException e) {
+            logger.error("Redirect failure with location :" +location);
             e.printStackTrace();
         }
     }
@@ -227,7 +237,20 @@ public class Response {
      * @param path
      */
     public void sendStaticFile(String path){
-        //todo
+        if(!path.startsWith("/")){
+            path = "/"+path;
+        }
+        URL url = ClassUtils.getResourceUrl(Express4JConfig.getStaticFilePath()+path);
+        if(url==null){
+            logger.error("Resource not found :" +path);
+        }
+        try {
+            IOUtils.copy(url.openStream(),getWriter());
+            getWriter().flush();
+        } catch (IOException e) {
+            logger.error("Open InputStream Failure With given path :"+path);
+            e.printStackTrace();
+        }
     }
 
     /**

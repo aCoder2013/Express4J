@@ -63,7 +63,6 @@ public class CoreFilter implements Filter {
             return;
         }
 
-
         Handler handler = RequestMappingFactory.getHandler(request.getMethod(), path);
         List<Interceptor> interceptors = AopFactory.getInterceptors(path);
         if (handler != null) {
@@ -78,7 +77,7 @@ public class CoreFilter implements Filter {
                 ResponseFactory.remove();
             }
         } else {
-            if (path.startsWith("http")) {
+            if (path.startsWith("http") || path.startsWith("https")) {
                 response.sendRedirect(path);
             } else {
                 String resourcePath = ClassUtils.getResourcePath(Express4JConfig.getStaticFilePath() + path);

@@ -130,4 +130,14 @@ public class ClassUtils {
                .getResource(name)
                .getPath();
     }
+
+    /**
+     * 得到给定路径的URL
+     * @param path
+     * @return
+     */
+    public static URL  getResourceUrl(String path){
+        return Thread.currentThread().getContextClassLoader()
+                .getResource(path);
+    }
 }

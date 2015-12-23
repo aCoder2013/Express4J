@@ -57,6 +57,7 @@ public class Express4JConfig {
     }
 
     public static void setServerPort(int serverPort) {
+        logger.info("Set Server Port To "+ serverPort);
         Express4JConfig.serverPort = serverPort;
     }
 
