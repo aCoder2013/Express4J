@@ -71,6 +71,7 @@ public class Response {
      * @param text
      */
     public void renderText(String text){
+        servletResponse.setContentType(Http.CONTENT_TYPE_TEXT);
         getWriter().write(text);
         getWriter().flush();
         getWriter().close();
@@ -81,6 +82,7 @@ public class Response {
      * @param htmlContent
      */
     public void renderHtml(String htmlContent){
+        servletResponse.setContentType(Http.CONTENT_TYPE_HTML);
         PrintWriter writer = getWriter();
         writer.write(htmlContent);
         writer.flush();
@@ -243,6 +245,7 @@ public class Response {
         URL url = ClassUtils.getResourceUrl(Express4JConfig.getStaticFilePath()+path);
         if(url==null){
             logger.error("Resource not found :" +path);
+            return;
         }
         try {
             IOUtils.copy(url.openStream(),getWriter());
