@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import static net.sourceforge.jwebunit.junit.JWebUnit.*;
 import static org.express4j.core.Express4J.controller;
-import static org.express4j.core.Express4J.run;
 
 /**
  * Created by Song on 2015/12/13.
@@ -18,7 +17,6 @@ public class UserControllerTest {
         controller("/news").with(NewsController.class);
         controller("/user").with(UserController.class);
         setBaseUrl("http://localhost:8080");
-        run();
     }
 
     @Test

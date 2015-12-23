@@ -41,7 +41,6 @@ public class InterceptorTest {
                         System.out.println("Hello3")
         );
         setBaseUrl("http://localhost:8080");
-        Express4J.run();
     }
     @Test
     public void testConflict(){

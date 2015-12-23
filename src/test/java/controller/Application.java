@@ -59,9 +59,7 @@ public class Application {
         get("/blogs/:year/:month/:day/:title",(request, response) ->
                 System.out.println(request.pathParams())
         );
-
-
-        listen(9000).run();
+        listen(9000);
         setBaseUrl("http://localhost:9000");
     }
 

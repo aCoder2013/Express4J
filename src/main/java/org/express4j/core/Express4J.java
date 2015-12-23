@@ -24,6 +24,7 @@ public final class Express4J{
 
     private static String prefixPath = "";
 
+    private static boolean isRunning = false;
 
 
 
@@ -64,8 +65,13 @@ public final class Express4J{
      */
     public static Express4J listen(int port){
         Express4JConfig.setServerPort(port);
+        if(isRunning()){
+            restart();
+        }
         return INSTANCE;
     }
+
+
 
 
     /**
@@ -131,6 +137,7 @@ public final class Express4J{
      * @param handler
      */
     public static void get(String path, Handler handler) {
+        ensureServerRunning();
         RequestMappingFactory.addMapping("GET", path, handler);
     }
 
@@ -141,9 +148,9 @@ public final class Express4J{
      * @param handler
      */
     public static void post(String path, Handler handler) {
+        ensureServerRunning();
         RequestMappingFactory.addMapping("POST", path, handler);
     }
-
 
     /**
      * 匹配HTTP PUT 请求
@@ -152,8 +159,10 @@ public final class Express4J{
      * @param handler
      */
     public static void put(String path, Handler handler) {
+        ensureServerRunning();
         RequestMappingFactory.addMapping("PUT", path, handler);
     }
+
 
     /**
      * 匹配HTTP DELETE 请求
@@ -162,17 +171,34 @@ public final class Express4J{
      * @param handler
      */
     public static void delete(String path, Handler handler) {
+        ensureServerRunning();
         RequestMappingFactory.addMapping("DELETE", path, handler);
     }
 
+    /**
+     * 检查服务器是否在运行状态
+     * @return
+     */
+    private static boolean isRunning(){
+        return isRunning;
+    }
 
+    /**
+     * 确保服务器保持在运行状态
+     */
+    private static void ensureServerRunning() {
+        if(!isRunning()){
+            run();
+        }
+    }
 
     /**
      * 启动应用
      */
-    public static void run(){
+    private static void run(){
         JettyServer.setServerPort(Express4JConfig.getServerPort());
         JettyServer.start();
+        isRunning = true;
     }
 
     /**
@@ -182,5 +208,12 @@ public final class Express4J{
         JettyServer.stop();
     }
 
+    /**
+     * 重新启动服务器
+     */
+    private static void restart() {
+        stop();
+        run();
+    }
 
 }

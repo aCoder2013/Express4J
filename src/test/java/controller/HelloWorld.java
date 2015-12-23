@@ -9,6 +9,5 @@ public class HelloWorld {
 
     public static void main(String[] args) {
         get("/hello",(req, res) ->res.renderHtml("Hello World"));
-        run();
     }
 }

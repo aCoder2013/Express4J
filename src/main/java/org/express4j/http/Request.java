@@ -4,6 +4,8 @@ import org.express4j.multipart.FileUploadHelper;
 import org.express4j.multipart.MultipartFile;
 import org.express4j.utils.IOUtils;
 import org.express4j.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,8 @@ import java.util.*;
  * Created by Song on 2015/12/4.
  */
 public class Request {
+
+    private static final Logger logger = LoggerFactory.getLogger(Request.class);
 
     private final HttpServletRequest servletRequest;
 
@@ -152,7 +156,11 @@ public class Request {
      * @return
      */
     public String pathParam(String name) {
-        return pathVariable.get(name);
+        String value = pathVariable.get(name);
+        if(value ==null){
+            logger.error("Path variable with given name "+name+" doesn't exit");
+        }
+        return value;
     }
 
     /**

@@ -1,7 +1,6 @@
 package other;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
 
 import java.util.Arrays;
 
@@ -10,7 +9,6 @@ import java.util.Arrays;
  */
 public class RegTest {
 
-    @Test
     public void test(){
         String templatePath = "/news/:id/detail";
         String path = "/news/123/detail";
@@ -43,7 +41,6 @@ public class RegTest {
     }
 
 
-    @Test
     public void test1(){
         String path  = "/news/:id/detail";
         int colonIndex = path.indexOf(":");

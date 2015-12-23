@@ -19,7 +19,6 @@ public class FileUploadTest {
             System.out.println(request.getFile("img"));
         });
         listen(9000);
-        run();
     }
 
 

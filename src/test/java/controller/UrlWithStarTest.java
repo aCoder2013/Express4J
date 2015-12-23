@@ -23,17 +23,16 @@ public class UrlWithStarTest {
 
 
         Express4J.get("/nihao/detail/*",(request, response) ->
-            response.renderText("World")
+            response.renderText(request.pathParam("1"))
         );
 
         setBaseUrl("http://localhost:8080");
-        Express4J.run();
     }
 
     @Test
     public void news(){
-        beginAt("/nihao/detail/");
-        assertTextPresent("World");
+        beginAt("/nihao/detail/xixi");
+        assertTextPresent("xixi");
     }
 
     @Test
