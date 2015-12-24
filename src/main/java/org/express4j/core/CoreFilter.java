@@ -8,6 +8,7 @@ import org.express4j.http.RequestFactory;
 import org.express4j.http.ResponseFactory;
 import org.express4j.http.mapping.RequestMappingFactory;
 import org.express4j.multipart.FileUploadHelper;
+import org.express4j.route.RouterScanner;
 import org.express4j.utils.ClassUtils;
 import org.express4j.utils.JsonUtils;
 import org.express4j.webserver.JettyServer;
@@ -53,6 +54,7 @@ public class CoreFilter implements Filter {
         servletContext = filterConfig.getServletContext();
         FileUploadHelper.init(servletContext);
         interceptorScanner.init();
+        RouterScanner.init();
     }
 
 

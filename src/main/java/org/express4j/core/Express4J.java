@@ -196,10 +196,12 @@ public final class Express4J{
     /**
      * 启动应用
      */
-    private static void run(){
-        JettyServer.setServerPort(Express4JConfig.getServerPort());
-        JettyServer.start();
-        isRunning = true;
+    public static void run(){
+        if(!isRunning()){
+            JettyServer.setServerPort(Express4JConfig.getServerPort());
+            JettyServer.start();
+            isRunning = true;
+        }
     }
 
     /**
