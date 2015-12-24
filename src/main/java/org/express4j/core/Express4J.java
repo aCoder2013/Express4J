@@ -96,6 +96,7 @@ public final class Express4J{
 
     /**
      * 设置要解析的控制器
+     * 设置路由前缀可以调用{@link Express4J#controller}
      * @param cls
      * @return
      */
