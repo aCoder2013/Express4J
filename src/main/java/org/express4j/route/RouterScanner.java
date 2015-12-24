@@ -42,6 +42,13 @@ public class RouterScanner {
         }
     }
 
+
+    /**
+     * 解析routes文件中的控制器段
+     * eg:GET /hello controller.HelloController.hello中的controller.HelloController.hello段
+     * @param fullName
+     * @return
+     */
     private static Handler parseHandler(String fullName) {
         Handler handler = null;
         String className = fullName.substring(0,fullName.lastIndexOf("."));
@@ -50,6 +57,9 @@ public class RouterScanner {
             String methodName = fullName.substring(fullName.lastIndexOf(".")+1);
             Method method = cls.getMethod(methodName);
             Object obj = cls.newInstance();
+            /**
+             * 控制器必须返回Handler
+             */
             handler = (Handler) method.invoke(obj);
         } catch (ClassNotFoundException e) {
             logger.error("Class not found : "+className);

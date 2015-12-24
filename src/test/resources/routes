@@ -1,0 +1,2 @@
+GET /hello  controller.HelloRoute.hello
+POST /world  controller.HelloRoute.world
