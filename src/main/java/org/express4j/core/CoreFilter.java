@@ -3,9 +3,9 @@ package org.express4j.core;
 import org.apache.commons.io.IOUtils;
 import org.express4j.aop.AopFactory;
 import org.express4j.aop.Interceptor;
-import org.express4j.handler.Handler;
 import org.express4j.http.RequestFactory;
 import org.express4j.http.ResponseFactory;
+import org.express4j.http.mapping.HandlerWrapper;
 import org.express4j.http.mapping.RequestMappingFactory;
 import org.express4j.multipart.FileUploadHelper;
 import org.express4j.route.RouterScanner;
@@ -65,12 +65,12 @@ public class CoreFilter implements Filter {
             return;
         }
 
-        Handler handler = RequestMappingFactory.getHandler(request.getMethod(), path);
+        HandlerWrapper handler = RequestMappingFactory.getHandler(request.getMethod(), path);
         List<Interceptor> interceptors = AopFactory.getInterceptors(path);
         if (handler != null) {
             try {
                 executeBeforeHandler(handler, interceptors);
-                handler.handle(RequestFactory.getRequest(), ResponseFactory.getResponse());
+                handler.invoke(RequestFactory.getRequest(), ResponseFactory.getResponse());
                 executeAfterHandler(handler, interceptors);
             } catch (Exception e) {
                 handleException(e);
@@ -93,7 +93,7 @@ public class CoreFilter implements Filter {
      * @param handler
      * @param interceptors
      */
-    private void executeAfterHandler(Handler handler, List<Interceptor> interceptors) {
+    private void executeAfterHandler(HandlerWrapper handler, List<Interceptor> interceptors) {
         if (interceptors!=null) {
             for(Interceptor interceptor :interceptors){
                 boolean continued = interceptor.after(RequestFactory.getRequest(), ResponseFactory.getResponse(), handler);
@@ -109,7 +109,7 @@ public class CoreFilter implements Filter {
      * @param handler
      * @param interceptors
      */
-    private void executeBeforeHandler(Handler handler, List<Interceptor> interceptors) {
+    private void executeBeforeHandler(HandlerWrapper handler, List<Interceptor> interceptors) {
         if (interceptors!=null) {
             for(Interceptor interceptor :interceptors){
                 boolean continued = interceptor.before(RequestFactory.getRequest(), ResponseFactory.getResponse(), handler);

@@ -1,6 +1,7 @@
 package other;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Test;
 
 import java.util.Arrays;
 
@@ -8,6 +9,20 @@ import java.util.Arrays;
  * Created by Song on 2015/12/12.
  */
 public class RegTest {
+
+
+    @Test
+    public void test2(){
+        String str= "POST /world  controller.HelloRoute.world(id:String,name:String)";
+        String target = str.substring(str.indexOf("(")+1,str.lastIndexOf(")"));
+        String[] nameAndTypes = target.split(",");
+        for(String nameAndType : nameAndTypes ){
+            System.out.println(nameAndType);
+            String[] paramWrapper = nameAndType.split(":");
+            String name = paramWrapper[0];
+            String type = paramWrapper[1];
+        }
+    }
 
     public void test(){
         String templatePath = "/news/:id/detail";

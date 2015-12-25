@@ -15,7 +15,8 @@ import java.util.Map;
  */
 public class RequestMappingFactory {
 
-    private static Map<RequestMapping, Handler> regularHandlerMap = new HashMap<>();
+    private static Map<RequestMapping, HandlerWrapper> regularHandlerMap = new HashMap<>();
+
 
 
     /**
@@ -35,7 +36,9 @@ public class RequestMappingFactory {
             return;
         }
         method = method.toUpperCase();//转换成大写
-        regularHandlerMap.put(new RequestMapping(method, path), handler);
+        HandlerWrapper wrapper = new HandlerWrapper();
+        wrapper.setHandler(handler);
+        regularHandlerMap.put(new RequestMapping(method, path), wrapper);
     }
 
     /**
@@ -44,9 +47,9 @@ public class RequestMappingFactory {
      * @param path
      * @return
      */
-    public static Handler getHandler(String method, String path) {
+    public static HandlerWrapper getHandler(String method, String path) {
         List<String> matchedPath = new ArrayList<>();
-        for (Map.Entry<RequestMapping, Handler> entries : regularHandlerMap.entrySet()) {
+        for (Map.Entry<RequestMapping, HandlerWrapper> entries : regularHandlerMap.entrySet()) {
             RequestMapping mapping = entries.getKey();
             if (mapping.getMethod().equals(method.toUpperCase())) {
                 if (PathMatchUtils.matches(mapping.getPath(), path)) {
