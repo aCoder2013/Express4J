@@ -4,10 +4,8 @@ import org.express4j.handler.Handler;
 import org.express4j.utils.PathMatchUtils;
 import org.express4j.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * 封装HTTP请求匹配信息
@@ -16,7 +14,6 @@ import java.util.Map;
 public class RequestMappingFactory {
 
     private static Map<RequestMapping, HandlerWrapper> regularHandlerMap = new HashMap<>();
-
 
 
     /**
@@ -38,6 +35,28 @@ public class RequestMappingFactory {
         method = method.toUpperCase();//转换成大写
         HandlerWrapper wrapper = new HandlerWrapper();
         wrapper.setHandler(handler);
+        regularHandlerMap.put(new RequestMapping(method, path), wrapper);
+    }
+
+    /**
+     * 增加路由匹配信息
+     * @param method 请求方法
+     * @param path  请求路径
+     * @param handler 处理器
+     */
+    public static void addMapping(String method, String path, Class<?> cls ,Method handler,LinkedList<MethodParamWrapper> params) {
+        if (!path.startsWith("/")) {
+            return;
+        }
+        if (path.endsWith("/")) {
+            path = path.substring(0, path.length() - 1);
+        }
+        if (handler == null) {
+            return;
+        }
+        method = method.toUpperCase();//转换成大写
+        HandlerWrapper wrapper = new HandlerWrapper();
+        wrapper.setHandler(cls,handler,params);
         regularHandlerMap.put(new RequestMapping(method, path), wrapper);
     }
 

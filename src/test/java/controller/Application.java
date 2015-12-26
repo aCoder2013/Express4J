@@ -18,7 +18,7 @@ public class Application {
 
     @BeforeClass
     public static void testGet() {
-        get("/hello", (request, response) ->
+        get("/htmltest", (request, response) ->
                         response.renderHtml("<h1>Hello World</h1>")
         );
 
@@ -69,7 +69,7 @@ public class Application {
 
     @Test
     public void html() {
-        beginAt("/hello");
+        beginAt("/htmltest");
         assertTextPresent("Hello World");
     }
 

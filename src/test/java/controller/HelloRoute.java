@@ -8,9 +8,9 @@ import org.express4j.handler.Handler;
  */
 public class HelloRoute {
 
-    public Handler hello(){
+    public Handler hello(Boolean id,String name){
         return (request, response) ->
-                response.renderText("Hello World");
+                response.renderText(id+":"+name);
     }
 
     public Handler world(){

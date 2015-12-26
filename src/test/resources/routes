@@ -1,2 +1,2 @@
-GET /hello  controller.HelloRoute.hello
-POST /world  controller.HelloRoute.world
+GET /hello  controller.HelloRoute.hello(id:java.lang.Boolean,name:java.lang.String)
+GET /world  controller.HelloRoute.world

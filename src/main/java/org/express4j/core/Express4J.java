@@ -216,6 +216,7 @@ public final class Express4J{
      */
     private static void restart() {
         stop();
+        isRunning = false;
         run();
     }
 

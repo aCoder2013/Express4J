@@ -29,6 +29,9 @@ public class RequestParam {
         return regularParams.get(name);
     }
 
+    public Map<String,Object> getRegularParams(){
+        return regularParams;
+    }
 
     public MultipartFile getFile(String name){
         List<MultipartFile> files = getFiles(name);

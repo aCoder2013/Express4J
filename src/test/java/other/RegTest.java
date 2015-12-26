@@ -12,6 +12,15 @@ public class RegTest {
 
 
     @Test
+    public void nsds(){
+        try {
+            System.out.println(Class.forName("String"));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void test2(){
         String str= "POST /world  controller.HelloRoute.world(id:String,name:String)";
         String target = str.substring(str.indexOf("(")+1,str.lastIndexOf(")"));

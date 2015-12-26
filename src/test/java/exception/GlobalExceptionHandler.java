@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatusCode.ACCEPTED)
     @ExceptionHandler(Exception.class)
     public void handleException(Exception e){
-        System.out.println(e.getClass().getName());
+        e.printStackTrace();
     }
 
 }
