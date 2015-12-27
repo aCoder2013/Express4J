@@ -71,7 +71,7 @@ public class UserController {
 GET /hello  controller.HelloRoute.hello(id:java.lang.Boolean,name:java.lang.String)
 GET /world  controller.HelloRoute.world
 ```
-        *   Each route starts with the HTTP method, followed by the URI pattern. The last element is the call definition.
+    Each route starts with the HTTP method, followed by the URI pattern. The last element is the call definition.
 ##Interceptor
 ```java
 public class LoginInterceptor implements Interceptor{
