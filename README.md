@@ -18,20 +18,20 @@ public class HelloWorld {
 ##Basic Concept
 ###Route
 <br>
-1.  Named Parameter
+-   Named Parameter
 ```java
 get("/news/:id/",(request, response) -> {
     response.renderText(request.pathParam("id")+":"+request.pathParam("detailId"));
 });
 ```
 
-2.  Wildcard 
+-   Wildcard 
 ```java
 get("/hello/*/to/*",(request, response) ->
     response.renderHtml("Hello "+request.pathParam("0")+" To "+request.pathParam("1")));
 ```
 
-3.  Modularity:
+-   Modularity:
 ```java
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -64,7 +64,7 @@ public class UserController {
     }
 }
 ```
-4.  Routes file
+-   Routes file
 This file lists all of the routes needed by the application. Each route consists of an HTTP method and URI pattern, both associated with a call to a handler.
 <br>
 Let’s see what a route definition looks like:
