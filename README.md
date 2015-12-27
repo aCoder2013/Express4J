@@ -67,10 +67,10 @@ public class UserController {
 -   Routes file
     *   This file lists all of the routes needed by the application. Each route consists of an HTTP method and URI pattern, both associated with a call to a handler.
     *    Let’s see what a route definition looks like:
-```
+```java
 GET /hello  controller.HelloRoute.hello(id:java.lang.Boolean,name:java.lang.String)
 GET /world  controller.HelloRoute.world
-```java
+```
     Each route starts with the HTTP method, followed by the URI pattern. The last element is the call definition.
 ##Interceptor
 ```java
