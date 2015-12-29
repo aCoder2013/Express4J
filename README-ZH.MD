@@ -68,7 +68,6 @@ GET /hello  controller.HelloRoute.hello(id:java.lang.Boolean,name:java.lang.Stri
 GET /world  controller.HelloRoute.world
 ```
     每个路由都由HTTP方法开头，紧接着是URI模板，最后是处理器的定义。
-    Each route starts with the HTTP method, followed by the URI pattern. The last element is the call definition.
 ##Interceptor
 ###拦截器
 ```java
