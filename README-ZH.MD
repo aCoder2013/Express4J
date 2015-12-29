@@ -60,6 +60,16 @@ public class UserController {
     }
 }
 ```
+-   路由文件
+    *   这个文件列出了应用中所有的路由信息.每个路由包括HTTP方法、URI模板和与其关联的处理器.
+    *   让我们看看路由文件长什么样子：
+```java
+GET /hello  controller.HelloRoute.hello(id:java.lang.Boolean,name:java.lang.String)
+GET /world  controller.HelloRoute.world
+```
+    每个路由都由HTTP方法开头，紧接着是URI模板，最后是处理器的定义。
+    Each route starts with the HTTP method, followed by the URI pattern. The last element is the call definition.
+##Interceptor
 ###拦截器
 ```java
 public class LoginInterceptor implements Interceptor{
