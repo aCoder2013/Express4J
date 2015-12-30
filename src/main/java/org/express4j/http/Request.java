@@ -209,9 +209,10 @@ public class Request {
     /**
      * @return the params collection
      */
-    public RequestParam params() {
+    public Map<String,Object> params() {
         checkIfParsed();
-        return params;
+        Map<String,Object> paramsMap = params.getParams();
+        return paramsMap;
     }
 
 

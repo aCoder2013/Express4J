@@ -8,7 +8,6 @@
 <h1>Hello File</h1>
 <form action="/process" method="post" enctype="multipart/form-data">
     <input type="file" name="img" />
-    <input type="file" name="img" />
     <input type="submit" value="Submit"/>
 </form>
 </body>

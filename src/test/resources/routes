@@ -1,2 +1,4 @@
 GET /hello  controller.HelloRoute.hello(id:java.lang.Boolean,name:java.lang.String)
 GET /world  controller.HelloRoute.world
+GET /file   controller.HelloRoute.file
+POST /process   controller.HelloRoute.process(img:org.express4j.multipart.MultipartFile)

@@ -48,12 +48,11 @@ public class HandlerWrapper {
         }
         if(type.equals(HandlerType.Method)){
             Object target = cls.newInstance();
-            Map<String,Object> paramMap = request.params().getRegularParams();
+            Map<String,Object> paramMap = request.params();
             Object[] paramArray = new Object[paramMap.size()];
             int index = 0;
             if (paramMap!=null && !paramMap.isEmpty()) {
                 for (MethodParamWrapper param : params) {
-//                    MethodParamWrapper param  = params.removeFirst();
                     Object value =paramMap.get(param.getParamName());
                     paramArray[index++] = ConvertUtils.convert(param.getParamType(),value);
                 }

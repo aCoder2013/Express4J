@@ -13,24 +13,25 @@ import java.util.Map;
  */
 public class RequestParam {
 
-    private Map<String,Object> regularParams = new HashMap<>();
+    private Map<String,Object> paramsMap = new HashMap<>();
 
     private List<FileParam> fileParams = new ArrayList<>();
 
     public void addRegularField(String name,Object value){
-        regularParams.put(name,value);
+        paramsMap.put(name,value);
     }
 
     public void addFileField(String name,MultipartFile file){
+        paramsMap.put(name,file);
         fileParams.add(new FileParam(name, file));
     }
 
-    public Object getRegularField(String name){
-        return regularParams.get(name);
+    public Object getField(String name){
+        return paramsMap.get(name);
     }
 
-    public Map<String,Object> getRegularParams(){
-        return regularParams;
+    public Map<String,Object> getParams(){
+        return paramsMap;
     }
 
     public MultipartFile getFile(String name){
@@ -49,11 +50,4 @@ public class RequestParam {
         return fileList;
     }
 
-    public Map<String,MultipartFile> getFileMap(String name){
-        Map<String ,MultipartFile> fileMap = new HashMap<>();
-        fileParams.stream()
-                .filter(fileParam ->fileParam.getName().equals(name))
-                .forEach(f->fileMap.put(f.getName(),f.getFile()));
-        return fileMap;
-    }
 }
