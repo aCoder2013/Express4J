@@ -96,7 +96,7 @@ public class RouterScanner {
                 paramType[i++] = entry.getValue();
             }
             //todo 解析方法参数
-            Method method = cls.getMethod(methodName,paramType);
+            Method method = cls.getDeclaredMethod(methodName,paramType);
             classAndMethod.setParams(paramName);
             classAndMethod.setCls(cls);
             classAndMethod.setMethod(method);

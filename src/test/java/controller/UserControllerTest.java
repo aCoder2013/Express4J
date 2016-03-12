@@ -15,13 +15,13 @@ public class UserControllerTest {
     @BeforeClass
     public static void init(){
         controller("/news").with(NewsController.class);
-        controller("/user").with(UserController.class);
+        controller("/user").with(UserController.class).run();
         setBaseUrl("http://localhost:8080");
     }
 
     @Test
     public void list(){
-        beginAt("/news/list");
+        beginAt("/news/list/23232");
         assertTextPresent("List News");
     }
 

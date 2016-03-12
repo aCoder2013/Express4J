@@ -57,6 +57,7 @@ public class HandlerWrapper {
                     paramArray[index++] = ConvertUtils.convert(param.getParamType(),value);
                 }
             }
+            method.setAccessible(true);
             Handler handler = (Handler) method.invoke(target,paramArray);
             handler.handle(request, response);
         }

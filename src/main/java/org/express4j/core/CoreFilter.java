@@ -83,7 +83,11 @@ public class CoreFilter implements Filter {
                 response.sendRedirect(path);
             } else {
                 String resourcePath = ClassUtils.getResourcePath(Express4JConfig.getStaticFilePath() + path);
-                IOUtils.copy(new FileInputStream(resourcePath), response.getOutputStream());
+                if(resourcePath !=null && !resourcePath.isEmpty()){
+                    IOUtils.copy(new FileInputStream(resourcePath), response.getOutputStream());
+                }else {
+                    logger.warn("Can't find mapping for path :" + path);
+                }
             }
         }
     }

@@ -12,7 +12,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/login",method = HttpMethod.GET)
-    public Handler login() {
+    private Handler login() {
         return (request, response) -> {
             response.renderHtml("Hello UserController");
         };

@@ -112,12 +112,13 @@ public final class Express4J{
     private static void parseHandler(Class<?> cls) {
         try {
             Object instance = cls.newInstance();
-            Method[] methods = cls.getMethods();
+            Method[] methods = cls.getDeclaredMethods();
             for(Method method :methods){
                 if(method.isAnnotationPresent(RequestMapping.class)){
                     RequestMapping pathClass = method.getAnnotation(RequestMapping.class);
                     String path = pathClass.value();//得到路径
                     String httpMethod = pathClass.method().name();
+                    method.setAccessible(true);
                     Handler handler = (Handler) method.invoke(instance);
                     RequestMappingFactory.addMapping(httpMethod, prefixPath+path, handler);
                 }
