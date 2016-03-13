@@ -17,18 +17,20 @@ public class HelloWorld {
 ```
 ##Basic Concept
 ###Route
+####Ant-Style
 <br>
 -   Named Parameter
 ```java
-get("/news/:id/",(request, response) -> {
+get("/news/{id}/",(request, response) -> {
     response.renderText(request.pathParam("id")+":"+request.pathParam("detailId"));
 });
 ```
 
 -   Wildcard 
 ```java
-get("/hello/*/to/*",(request, response) ->
-    response.renderHtml("Hello "+request.pathParam("0")+" To "+request.pathParam("1")));
+/hello/*/to/*
+/hello/**/to/
+/he?llo
 ```
 
 -   Modularity:
