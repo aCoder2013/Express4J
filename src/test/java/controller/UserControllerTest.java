@@ -21,7 +21,7 @@ public class UserControllerTest {
 
     @Test
     public void list(){
-        beginAt("/news/list/23232");
+        beginAt("/news/list");
         assertTextPresent("List News");
     }
 

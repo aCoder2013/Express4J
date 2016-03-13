@@ -15,7 +15,7 @@ public class RegTest {
     @Test
     public void nsds(){
         try {
-            System.out.println(Class.forName("String"));
+            System.out.println(Class.forName("java.lang.String"));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

@@ -11,6 +11,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.*;
 
 /**
@@ -146,7 +148,25 @@ public class Request {
      * @param value
      */
     public void addPathVariable(String name, String value) {
-        pathVariable.put(name, value);
+        try {
+            pathVariable.put(name, URLDecoder.decode(value,"UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            logger.warn("Can not decode url string :" + value);
+            e.printStackTrace();
+        }
+    }
+
+
+    public void addPathVariables(Map<String , String> map){
+        for (String key : map.keySet()){
+            String value = map.get(key);
+            try {
+                addPathVariable(key, URLDecoder.decode(value,"UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                logger.warn("Can not decode url string :" + value);
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

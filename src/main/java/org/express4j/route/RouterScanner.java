@@ -51,7 +51,6 @@ public class RouterScanner {
             String target = str.substring(str.indexOf("(") + 1, str.lastIndexOf(")"));
             String[] nameAndTypes = target.split(",");
             for (String nameAndType : nameAndTypes) {
-                System.out.println(nameAndType);
                 String[] paramWrapper = nameAndType.split(":");
                 String name = paramWrapper[0];
                 String type = paramWrapper[1];

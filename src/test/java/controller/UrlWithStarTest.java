@@ -17,13 +17,13 @@ public class UrlWithStarTest {
     @BeforeClass
     public static void init(){
         Express4J.get("/hello/*/to/*",(request, response) ->
-            response.renderHtml("Hello "+request.pathParam("0")+" To "+request.pathParam("1"))
+            response.renderHtml("Hello")
         );
 
 
 
         Express4J.get("/nihao/detail/*",(request, response) ->
-            response.renderText(request.pathParam("1"))
+            response.renderText("nihao")
         );
 
         setBaseUrl("http://localhost:8080");
@@ -32,12 +32,12 @@ public class UrlWithStarTest {
     @Test
     public void news(){
         beginAt("/nihao/detail/xixi");
-        assertTextPresent("xixi");
+        assertTextPresent("nihao");
     }
 
     @Test
     public void test(){
         beginAt("/hello/Mars/to/Tom");
-        assertTextPresent("Hello Mars To Tom");
+        assertTextPresent("Hello");
     }
 }

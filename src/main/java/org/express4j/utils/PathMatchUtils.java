@@ -3,6 +3,8 @@ package org.express4j.utils;
 import org.express4j.http.RequestFactory;
 
 public class PathMatchUtils {
+
+
     public static boolean matches(String template, String path) {
         String[] templatePathList = template.split("/");
         String[] pathList = path.split("/");
@@ -32,6 +34,7 @@ public class PathMatchUtils {
             if (templatePathList.length < pathList.length) {
                 int i = 0;
                 while (i < templatePathList.length) {
+                    //todo : bug 路径不匹配
                     if (!templatePathList[i].equals(pathList[i]) && !templatePathList[i].equals("*")) {
                         return false;
                     }

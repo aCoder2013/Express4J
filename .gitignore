@@ -1,6 +1,9 @@
 *.class
 target
 .idea
+express4j.iml
+express4j.ipr
+express4j.iws
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

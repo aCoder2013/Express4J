@@ -125,10 +125,13 @@ public class ClassUtils {
      * @return the path of resource
      */
     public static String getResourcePath(String name){
-       return Thread.currentThread()
+        URL pathUrl = Thread.currentThread()
                .getContextClassLoader()
-               .getResource(name)
-               .getPath();
+               .getResource(name);
+        if(pathUrl!=null){
+            return pathUrl.getPath();
+        }
+        return null;
     }
 
     /**

@@ -7,11 +7,11 @@ public class RequestMapping {
 
     private String method ;
 
-    private String path;
+    private String pathPattern;
 
-    public RequestMapping(String method, String path) {
+    public RequestMapping(String method, String pathPattern) {
         this.method = method;
-        this.path = path;
+        this.pathPattern = pathPattern;
     }
 
     public String getMethod() {
@@ -22,12 +22,12 @@ public class RequestMapping {
         this.method = method;
     }
 
-    public String getPath() {
-        return path;
+    public String getPathPattern() {
+        return pathPattern;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setPathPattern(String pathPattern) {
+        this.pathPattern = pathPattern;
     }
 
     @Override
@@ -38,13 +38,13 @@ public class RequestMapping {
         RequestMapping requestMapping = (RequestMapping) o;
 
         if (method != null ? !method.equals(requestMapping.method) : requestMapping.method != null) return false;
-        return !(path != null ? !path.equals(requestMapping.path) : requestMapping.path != null);
+        return !(pathPattern != null ? !pathPattern.equals(requestMapping.pathPattern) : requestMapping.pathPattern != null);
     }
 
     @Override
     public int hashCode() {
         int result = method != null ? method.hashCode() : 0;
-        result = 31 * result + (path != null ? path.hashCode() : 0);
+        result = 31 * result + (pathPattern != null ? pathPattern.hashCode() : 0);
         return result;
     }
 }

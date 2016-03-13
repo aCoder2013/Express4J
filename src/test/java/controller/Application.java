@@ -52,11 +52,11 @@ public class Application {
             throw new ParamConflictException();
         });
 
-        get("/news/:id/detail/:detailId",(request, response) -> {
+        get("/news/{id}/detail/{detailId}",(request, response) -> {
             response.renderText(request.pathParam("id")+":"+request.pathParam("detailId"));
         });
 
-        get("/blogs/:year/:month/:day/:title",(request, response) ->
+        get("/blogs/{year}/{month}/{day}/{title}",(request, response) ->
                 System.out.println(request.pathParams())
         );
         setBaseUrl("http://localhost:8080");

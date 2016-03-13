@@ -1,7 +1,9 @@
 package org.express4j.http.mapping;
 
 import org.express4j.handler.Handler;
-import org.express4j.utils.PathMatchUtils;
+import org.express4j.http.RequestFactory;
+import org.express4j.utils.AntPathMatcher;
+import org.express4j.utils.PathMatcher;
 import org.express4j.utils.StringUtils;
 
 import java.lang.reflect.Method;
@@ -15,6 +17,7 @@ public class RequestMappingFactory {
 
     private static Map<RequestMapping, HandlerWrapper> regularHandlerMap = new HashMap<>();
 
+    private static PathMatcher pathMatcher = new AntPathMatcher();
 
     /**
      * 增加路由匹配信息
@@ -71,23 +74,31 @@ public class RequestMappingFactory {
         for (Map.Entry<RequestMapping, HandlerWrapper> entries : regularHandlerMap.entrySet()) {
             RequestMapping mapping = entries.getKey();
             if (mapping.getMethod().equals(method.toUpperCase())) {
-                if (PathMatchUtils.matches(mapping.getPath(), path)) {
-                    matchedPath.add(mapping.getPath());
+                if (pathMatcher.match(mapping.getPathPattern(), path)) {
+                    matchedPath.add(mapping.getPathPattern());
                 }
             }
         }
+
         if (!matchedPath.isEmpty()) {
             String bestPath = "";
-            for(String p : matchedPath){
-                if(p.length()==bestPath.length()){
-                    if(StringUtils.compute(p,'*')<StringUtils.compute(bestPath,'*')){
+
+            if(matchedPath.size() == 1){
+                bestPath = matchedPath.get(0);
+            }else {
+                for(String p : matchedPath){
+                    if(p.length()==bestPath.length()){
+                        //todo 简单计算通配符数量，过于简单
+                        if(StringUtils.compute(p, '*')<StringUtils.compute(bestPath,'*')){
+                            bestPath = p;
+                        }
+                    }
+                    if(bestPath.length()<p.length()){
                         bestPath = p;
                     }
                 }
-                if(bestPath.length()<p.length()){
-                    bestPath = p;
-                }
             }
+            RequestFactory.getRequest().addPathVariables(pathMatcher.extractUriTemplateVariables(bestPath,path));
             return regularHandlerMap.get(new RequestMapping(method,bestPath));
         }
         return null;
@@ -98,7 +109,7 @@ public class RequestMappingFactory {
         Handler handler = null;
         handler = regularHandlerMap.entrySet().stream()
                 .filter(entry -> {
-                    if(entry.getKey().getMethod().equals(method.toUpperCase()) && RegUtils.matches(entry.getKey().getPath(), path)){
+                    if(entry.getKey().getMethod().equals(method.toUpperCase()) && RegUtils.matches(entry.getKey().getPathPattern(), path)){
                         return true;
                     }
                     return false;
