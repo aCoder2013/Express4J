@@ -27,7 +27,7 @@ get("/news/{id}/",(request, response) -> {
 ```
 
 -   Wildcard 
-```java
+```
 /hello/*/to/*
 /hello/**/to/
 /he?llo
