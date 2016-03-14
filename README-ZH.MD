@@ -1,5 +1,5 @@
 # Express4J
-以[Express](http://expressjs.com/en/index.html)为灵感的的轻量级JavaWeb框架,优雅且高效,完全不存在大量的XML文件以及注解
+以[Express](http://expressjs.com/en/index.html)为灵感的轻量级JavaWeb框架,优雅且高效,完全不存在大量的XML文件以及注解
 #快速开始 :
 ```java
 import static org.express4j.core.Express4J.*;
