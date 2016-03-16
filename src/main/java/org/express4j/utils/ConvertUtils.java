@@ -26,6 +26,10 @@ public class ConvertUtils {
             return Float.parseFloat((String) value);
         }
 
+        if(Double.class.isAssignableFrom(cls)){
+            return Double.parseDouble((String) value);
+        }
+
         if(Boolean.class.isAssignableFrom(cls)){
             return Boolean.parseBoolean((String) value);
         }
