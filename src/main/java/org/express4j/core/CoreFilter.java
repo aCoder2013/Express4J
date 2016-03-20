@@ -98,7 +98,7 @@ public class CoreFilter implements Filter {
      * @param interceptors
      */
     private void executeAfterHandler(HandlerWrapper handler, List<Interceptor> interceptors) {
-        if (interceptors!=null) {
+        if (interceptors!=null && !interceptors.isEmpty()) {
             for(Interceptor interceptor :interceptors){
                 boolean continued = interceptor.after(RequestFactory.getRequest(), ResponseFactory.getResponse(), handler);
                 if(!continued){
@@ -114,7 +114,7 @@ public class CoreFilter implements Filter {
      * @param interceptors
      */
     private void executeBeforeHandler(HandlerWrapper handler, List<Interceptor> interceptors) {
-        if (interceptors!=null) {
+        if (interceptors!=null && !interceptors.isEmpty()) {
             for(Interceptor interceptor :interceptors){
                 boolean continued = interceptor.before(RequestFactory.getRequest(), ResponseFactory.getResponse(), handler);
                 if(!continued){
