@@ -1,14 +1,12 @@
 package controller;
 
 import model.User;
-import org.express4j.core.Express4J;
 import org.express4j.http.HttpStatusCode;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static net.sourceforge.jwebunit.junit.JWebUnit.*;
-import static org.express4j.core.Express4J.*;
+import static org.express4j.core.Express4J.get;
 
 /**
  * Created by Song on 2015/12/7.
@@ -107,9 +105,6 @@ public class Application {
         assertTextPresent("{\"name\":\"/error\",\"age\":23,\"password\":\"controller.UserNotFoundException\"}");
     }
 
-    @AfterClass
-    public static void destory() {
-        Express4J.stop();
-    }
+
 
 }

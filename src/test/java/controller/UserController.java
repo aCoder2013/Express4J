@@ -20,6 +20,7 @@ public class UserController {
 
     @RequestMapping("/register")
     public Handler register(){
-        return (request, response) -> response.renderHtml("<h2>Register</h2>");
+        return (request, response) ->
+                response.renderHtml("<h2>Register</h2>");
     }
 }

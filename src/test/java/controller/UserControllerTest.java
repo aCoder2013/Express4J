@@ -1,5 +1,6 @@
 package controller;
 
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -21,7 +22,7 @@ public class UserControllerTest {
 
     @Test
     public void list(){
-        beginAt("/news/list");
+        beginAt("/news/lists");
         assertTextPresent("List News");
     }
 

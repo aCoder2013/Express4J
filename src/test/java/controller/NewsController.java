@@ -9,8 +9,9 @@ import org.express4j.handler.Handler;
 public class NewsController {
 
 
-    @RequestMapping("/list")
+    @RequestMapping("/lists")
     public Handler list() {
-        return (request, response) -> response.renderText("List News");
+        return (request, response) ->
+                response.renderText("List News");
     }
 }

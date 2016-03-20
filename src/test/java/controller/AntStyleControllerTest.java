@@ -4,9 +4,7 @@ import org.express4j.core.Express4J;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static net.sourceforge.jwebunit.junit.JWebUnit.assertTextPresent;
-import static net.sourceforge.jwebunit.junit.JWebUnit.beginAt;
-import static net.sourceforge.jwebunit.junit.JWebUnit.setBaseUrl;
+import static net.sourceforge.jwebunit.junit.JWebUnit.*;
 
 /**
  * Created by Song on 2016/3/13.
@@ -37,4 +35,6 @@ public class AntStyleControllerTest {
         beginAt("/topic/comment/a");
         assertTextPresent("/topic/comment/a");
     }
+
+
 }

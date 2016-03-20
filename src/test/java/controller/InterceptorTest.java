@@ -7,8 +7,7 @@ import org.express4j.http.Response;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static net.sourceforge.jwebunit.junit.JWebUnit.beginAt;
-import static net.sourceforge.jwebunit.junit.JWebUnit.setBaseUrl;
+import static net.sourceforge.jwebunit.junit.JWebUnit.*;
 
 /**
  * Created by Song on 2015/12/13.
@@ -19,78 +18,65 @@ public class InterceptorTest {
     public static void init(){
 
         Express4J.get("/list/detail/*",(request1, response1) ->
-                System.out.println("list/detail/*")
+                response1.renderText("list/detail/*")
         );
 
-        Express4J.addInterceptor("/list/*", LoginInterceptor.class,TestLoginInterceptor.class);
+        Express4J.addInterceptor("/list/*",
+                LoginInterceptor.class,TestLoginInterceptor.class);
         Express4J.get("/list/*", (request, response) ->
-                System.out.println("list/*")
+                response.renderText("/list/*")
         );
 
-        Express4J.get("/*/*",(request1, response1) -> {
-            System.out.println("/*/*");
+        Express4J.get("/*/*",(request, response) -> {
+            response.renderText("/*/*");
         });
         Express4J.get("/list/1", (request, response) ->{
-            System.out.println("Hello1");
-            response.renderHtml("Hello1");
+            response.renderHtml("/list/1");
         });
-        Express4J.get("/list/2", (request, response) ->
-                System.out.println("Hello2")
-        );
-        Express4J.get("/list/3", (request, response) ->
-                        System.out.println("Hello3")
-        );
         setBaseUrl("http://localhost:8080");
     }
+
+
     @Test
     public void testConflict(){
         beginAt("/list/detail/1");
+        assertTextPresent("list/detail/*");
     }
 
     @Test
     public void test1(){
         beginAt("/list/1");
+        assertTextPresent("/list/1");
     }
-
-
-    @Test
-    public void test2(){
-        beginAt("/list/2");
-    }
-
-    @Test
-    public void test3(){
-        beginAt("/list/3");
-    }
-
-
 
     public static class TestLoginInterceptor implements Interceptor{
 
         @Override
         public boolean before(Request request, Response response, Object handler) {
-            System.out.println("Before TestLoginInterceptor");
+            response.renderText("Before TestLoginInterceptor");
             return false;
         }
 
         @Override
         public boolean after(Request request, Response response, Object handler) {
-            System.out.println("After TestLoginInterceptor");
+            response.renderText("After TestLoginInterceptor");
             return false;
         }
     }
+
+
 
     public static class LoginInterceptor implements Interceptor{
 
         @Override
         public boolean before(Request request, Response response, Object handler) {
-            System.out.println("Before");
+            response.renderText("before");
             return true;
         }
 
         @Override
         public boolean after(Request request, Response response, Object handler) {
-            System.out.println("After");
+            response.renderText("after");
             return true;
         }
     }

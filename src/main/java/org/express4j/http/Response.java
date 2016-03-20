@@ -73,8 +73,6 @@ public class Response {
     public void renderText(String text){
         servletResponse.setContentType(Http.CONTENT_TYPE_TEXT);
         getWriter().write(text);
-        getWriter().flush();
-        getWriter().close();
     }
 
     /**
@@ -85,8 +83,6 @@ public class Response {
         servletResponse.setContentType(Http.CONTENT_TYPE_HTML);
         PrintWriter writer = getWriter();
         writer.write(htmlContent);
-        writer.flush();
-        writer.close();
     }
 
     /**
@@ -115,8 +111,6 @@ public class Response {
         servletResponse.setContentType(Http.CONTENT_TYPE_JSON);
         String json = JsonUtils.toJson(jsonContent);
         getWriter().write(json);
-        getWriter().flush();
-        getWriter().close();
     }
 
 
@@ -135,8 +129,6 @@ public class Response {
         String json = JsonUtils.toJson(jsonContent);
         json = callback+"("+json+");";
         getWriter().write(json);
-        getWriter().flush();
-        getWriter().close();
     }
 
     public void send(String path){
@@ -249,7 +241,6 @@ public class Response {
         }
         try {
             IOUtils.copy(url.openStream(),getWriter());
-            getWriter().flush();
         } catch (IOException e) {
             logger.error("Open InputStream Failure With given path :"+path);
             e.printStackTrace();
