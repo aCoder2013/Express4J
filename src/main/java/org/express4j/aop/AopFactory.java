@@ -1,6 +1,7 @@
 package org.express4j.aop;
 
-import org.express4j.utils.PathMatchUtils;
+import org.express4j.utils.AntPathMatcher;
+import org.express4j.utils.PathMatcher;
 
 import java.util.*;
 
@@ -9,7 +10,15 @@ import java.util.*;
  */
 public class AopFactory {
 
+    /**
+     * 路径和对应的拦截器匹配
+     */
     private static Map<String,List<Class<? extends Interceptor>>> interceptorMap = new HashMap<>();
+
+    /**
+     * 路径匹配工具类
+     */
+    private static PathMatcher pathMatcher = new AntPathMatcher();
 
     /**
      * 将路径与拦截器
@@ -34,14 +43,14 @@ public class AopFactory {
      */
     public static List<Interceptor> getInterceptors(String path){
         List<Interceptor> interceptorList = new LinkedList<>();
-        for(String templatePath : interceptorMap.keySet()){
-            if(PathMatchUtils.matches(templatePath,path)){
-                path = templatePath;
+        for(String pattern : interceptorMap.keySet()){
+            if(pathMatcher.match(pattern,path)){
+                path = pattern;
             }
         }
-        List<Class<? extends Interceptor>> intercetorsClasses = interceptorMap.get(path);
-        if (intercetorsClasses!=null) {
-            for(Class<? extends Interceptor> interceptorCLass : intercetorsClasses){
+        List<Class<? extends Interceptor>> interceptorClasses = interceptorMap.get(path);
+        if (interceptorClasses!=null) {
+            for(Class<? extends Interceptor> interceptorCLass : interceptorClasses){
                 try {
                     Interceptor interceptor  = interceptorCLass.newInstance();
                     interceptorList.add(interceptor);
