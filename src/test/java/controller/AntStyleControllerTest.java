@@ -26,8 +26,8 @@ public class AntStyleControllerTest {
 
     @Test
     public void test(){
-        beginAt("/news/asdasd");
-        assertTextPresent("asdasd");
+        beginAt("/news/123");
+        assertTextPresent("123");
     }
 
     @Test

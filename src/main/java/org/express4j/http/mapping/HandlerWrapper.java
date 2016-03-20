@@ -42,7 +42,7 @@ public class HandlerWrapper {
         this.type = HandlerType.Method;
     }
 
-    public void invoke(Request request,Response response) throws Exception{
+    public void invoke(Request request, Response response) throws Exception{
         if(type.equals(HandlerType.Handler)){
             handler.handle(request, response);
         }
@@ -63,6 +63,9 @@ public class HandlerWrapper {
         }
     }
 
+    public Handler getHandler() {
+        return handler;
+    }
 
     public enum HandlerType{
         Handler,Method

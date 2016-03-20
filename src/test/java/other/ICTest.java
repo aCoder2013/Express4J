@@ -14,7 +14,7 @@ public class ICTest {
     public void test(){
         InterceptorScanner scanner = new InterceptorScanner();
         scanner.init();
-        Set<Class<?>> classHashSet = scanner.getIntercetporSet();
+        Set<Class<?>> classHashSet = scanner.getInterceptorSet();
         for(Class<?> c :classHashSet){
             System.out.println(c.getName());
         }

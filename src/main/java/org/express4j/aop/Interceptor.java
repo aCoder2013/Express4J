@@ -1,7 +1,9 @@
 package org.express4j.aop;
 
-import org.express4j.http.Request;
-import org.express4j.http.Response;
+import org.express4j.handler.Handler;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 拦截器
@@ -19,7 +21,7 @@ public interface Interceptor {
      * @param handler  处理器
      * @return true:如果想继续拦截器链的执行，false:想要终止处理
      */
-    boolean before(Request request,Response response,Object handler);
+    boolean before(HttpServletRequest request, HttpServletResponse response, Handler handler);
 
 
     /**
@@ -30,6 +32,6 @@ public interface Interceptor {
      * @param handler  处理器
      * @return true:如果想继续拦截器链的执行，false:想要终止处理
      */
-    boolean after(Request request,Response response,Object handler);
+    boolean after(HttpServletRequest request,HttpServletResponse response,Handler handler);
 
 }

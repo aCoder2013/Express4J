@@ -2,10 +2,12 @@ package controller;
 
 import org.express4j.aop.Interceptor;
 import org.express4j.core.Express4J;
-import org.express4j.http.Request;
-import org.express4j.http.Response;
+import org.express4j.handler.Handler;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import static net.sourceforge.jwebunit.junit.JWebUnit.*;
 
@@ -52,15 +54,15 @@ public class InterceptorTest {
     public static class TestLoginInterceptor implements Interceptor{
 
         @Override
-        public boolean before(Request request, Response response, Object handler) {
-            response.renderText("Before TestLoginInterceptor");
-            return false;
+        public boolean before(HttpServletRequest request, HttpServletResponse response, Handler handler) {
+            System.out.println("Before TestLoginInterceptor");
+            return true;
         }
 
         @Override
-        public boolean after(Request request, Response response, Object handler) {
-            response.renderText("After TestLoginInterceptor");
-            return false;
+        public boolean after(HttpServletRequest request, HttpServletResponse response, Handler handler) {
+            System.out.println("After TestLoginInterceptor");
+            return true;
         }
     }
 
@@ -69,14 +71,14 @@ public class InterceptorTest {
     public static class LoginInterceptor implements Interceptor{
 
         @Override
-        public boolean before(Request request, Response response, Object handler) {
-            response.renderText("before");
+        public boolean before(HttpServletRequest request, HttpServletResponse response, Handler handler) {
+            System.out.println("Before Login :" +request.getRequestURL());
             return true;
         }
 
         @Override
-        public boolean after(Request request, Response response, Object handler) {
-            response.renderText("after");
+        public boolean after(HttpServletRequest request, HttpServletResponse response, Handler handler) {
+            System.out.println("After Login :" +request.getRequestURL());
             return true;
         }
     }

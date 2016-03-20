@@ -3,7 +3,7 @@ package org.express4j.webserver;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.express4j.core.CoreFilter;
+import org.express4j.servlet.CoreFilter;
 
 import javax.servlet.DispatcherType;
 import java.util.EnumSet;

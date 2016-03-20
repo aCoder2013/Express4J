@@ -3,6 +3,7 @@ package org.express4j.core;
 import org.express4j.annotation.ExceptionHandler;
 import org.express4j.annotation.ExceptionInterceptor;
 import org.express4j.annotation.ResponseStatus;
+import org.express4j.handler.ExceptionHandlerWrapper;
 import org.express4j.utils.ClassUtils;
 
 import java.lang.reflect.Method;
@@ -18,16 +19,16 @@ import java.util.stream.Collectors;
  */
 public class InterceptorScanner {
 
-    private Set<Class<?>> intercetporSet = new HashSet<>();
-    private Map<Class<?>, ExceptionHandlerWrapper> methodMap = new HashMap<>();
+    private static Set<Class<?>> interceptorSet = new HashSet<>();
+    private static Map<Class<?>, ExceptionHandlerWrapper> methodMap = new HashMap<>();
 
     /**
      * 初始化方法
      */
-    public void init() {
+    public static void init() {
         loadInterceptorClass();
-        if (!intercetporSet.isEmpty()) {
-            for (Class<?> cls : intercetporSet) {
+        if (!interceptorSet.isEmpty()) {
+            for (Class<?> cls : interceptorSet) {
                 Method[] methods = cls.getMethods();
                 for (Method m : methods) {
                     if (m.isAnnotationPresent(ExceptionHandler.class)) {
@@ -47,63 +48,21 @@ public class InterceptorScanner {
     /**
      * 加载标有ExceptionInterceptor注解的类
      */
-    private void loadInterceptorClass() {
+    private static void loadInterceptorClass() {
         Set<Class<?>> classSet = ClassUtils.getClassSet();
-        intercetporSet.addAll(classSet.stream()
+        interceptorSet.addAll(classSet.stream()
                 .filter(cls -> cls.isAnnotationPresent(ExceptionInterceptor.class))
                 .collect(Collectors.toList()));
     }
 
-    public Set<Class<?>> getIntercetporSet() {
-        return intercetporSet;
+    public static Set<Class<?>> getInterceptorSet() {
+        return interceptorSet;
     }
 
-    public Map<Class<?>, ExceptionHandlerWrapper> getMethodMap() {
+    public static Map<Class<?>, ExceptionHandlerWrapper> getMethodMap() {
         return methodMap;
     }
 
 
-    /**
-     * 封装异常处理器
-     */
-    public class ExceptionHandlerWrapper {
-        private Class aClass;
-        private Method aMethod;
-        private int statusCode;
 
-        public ExceptionHandlerWrapper(Class aClass, Method aMethod) {
-            this.aClass = aClass;
-            this.aMethod = aMethod;
-        }
-
-        public ExceptionHandlerWrapper(Class aClass, Method aMethod, int statusCode) {
-            this.aClass = aClass;
-            this.aMethod = aMethod;
-            this.statusCode = statusCode;
-        }
-
-        public int getStatusCode() {
-            return statusCode;
-        }
-
-        public void setStatusCode(int statusCode) {
-            this.statusCode = statusCode;
-        }
-
-        public Class getaClass() {
-            return aClass;
-        }
-
-        public void setaClass(Class aClass) {
-            this.aClass = aClass;
-        }
-
-        public Method getaMethod() {
-            return aMethod;
-        }
-
-        public void setaMethod(Method aMethod) {
-            this.aMethod = aMethod;
-        }
-    }
 }

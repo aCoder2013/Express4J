@@ -1,7 +1,6 @@
 package org.express4j.http.mapping;
 
 import org.express4j.handler.Handler;
-import org.express4j.http.RequestFactory;
 import org.express4j.utils.AntPathMatcher;
 import org.express4j.utils.PathMatcher;
 import org.express4j.utils.StringUtils;
@@ -65,11 +64,13 @@ public class RequestMappingFactory {
 
     /**
      * 根据请求方法和路径得到对应的控制器
-     * @param method
-     * @param path
+     * @param method HTTP方法
+     * @param path  HTTP路径
+     * @param templateVariables 保存模板变量
+     *        例如：/person/{id} => /person/123 = {id:123}
      * @return
      */
-    public static HandlerWrapper getHandler(String method, String path) {
+    public static HandlerWrapper getHandlerWrapper(String method, String path,Map<String, String> templateVariables) {
         List<String> matchedPath = new ArrayList<>();
         for (Map.Entry<RequestMapping, HandlerWrapper> entries : regularHandlerMap.entrySet()) {
             RequestMapping mapping = entries.getKey();
@@ -98,14 +99,14 @@ public class RequestMappingFactory {
                     }
                 }
             }
-            RequestFactory.getRequest().addPathVariables(pathMatcher.extractUriTemplateVariables(bestPath,path));
+            templateVariables.putAll(pathMatcher.extractUriTemplateVariables(bestPath,path));
             return regularHandlerMap.get(new RequestMapping(method,bestPath));
         }
         return null;
     }
 
 
-/*    public static Handler getHandler(String method, String path){
+/*    public static Handler getHandlerWrapper(String method, String path){
         Handler handler = null;
         handler = regularHandlerMap.entrySet().stream()
                 .filter(entry -> {
