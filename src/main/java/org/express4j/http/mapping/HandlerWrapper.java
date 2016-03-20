@@ -50,6 +50,7 @@ public class HandlerWrapper {
             Object target = cls.newInstance();
             Map<String,Object> paramMap = request.params();
             Object[] paramArray = new Object[paramMap.size()];
+
             int index = 0;
             if (paramMap!=null && !paramMap.isEmpty()) {
                 for (MethodParamWrapper param : params) {
