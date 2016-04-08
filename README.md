@@ -173,7 +173,8 @@ public class BooksControllerTest {
 
     public static class Book {
 
-        public String author, title;
+        private String author;
+        private String title;
 
         public Book(String author, String title) {
             this.author = author;
