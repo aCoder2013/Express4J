@@ -39,7 +39,7 @@ public final class Express4J{
      * @return
      */
     public static Express4J getInstance(){
-        return INSTANCE;
+        return Express4JHolder.INSTANCE;
     }
     /**
      * 设置静态文件路径
@@ -219,6 +219,10 @@ public final class Express4J{
         stop();
         isRunning = false;
         run();
+    }
+
+    protected static class Express4JHolder{
+        private static final Express4J INSTANCE = new Express4J();
     }
 
 }
