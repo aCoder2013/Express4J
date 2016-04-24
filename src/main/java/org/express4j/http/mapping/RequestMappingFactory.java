@@ -79,11 +79,13 @@ public class RequestMappingFactory {
      */
     public static HandlerWrapper getHandlerWrapper(String method, String path,Map<String, String> templateVariables) {
         List<String> matchedPath = new ArrayList<>();
-        for (Map.Entry<RequestMapping, HandlerWrapper> entries : regularHandlerMap.entrySet()) {
-            RequestMapping mapping = entries.getKey();
-            if (mapping.getMethod().equals(method.toUpperCase())) {
-                if (pathMatcher.match(mapping.getPathPattern(), path)) {
-                    matchedPath.add(mapping.getPathPattern());
+        if(regularHandlerMap != null){
+            for (Map.Entry<RequestMapping, HandlerWrapper> entries : regularHandlerMap.entrySet()) {
+                RequestMapping mapping = entries.getKey();
+                if (mapping.getMethod().equals(method.toUpperCase())) {
+                    if (pathMatcher.match(mapping.getPathPattern(), path)) {
+                        matchedPath.add(mapping.getPathPattern());
+                    }
                 }
             }
         }
