@@ -81,6 +81,9 @@ public final class Express4J{
      * @param interceptors
      */
     public static void addInterceptor(String path,Class<? extends Interceptor> ... interceptors){
+        if(StringUtils.isEmpty(path) || interceptors == null){
+            return;
+        }
         AopFactory.addMapping(path,interceptors);
     }
 
