@@ -25,6 +25,9 @@ public class RequestMappingFactory {
      * @param handler 处理器
      */
     public static void addMapping(String method, String path, Handler handler) {
+        if(StringUtils.isEmpty(method) || StringUtils.isEmpty(path) || handler == null){
+            return;
+        }
         if (!path.startsWith("/")) {
             return;
         }
@@ -47,6 +50,10 @@ public class RequestMappingFactory {
      * @param handler 处理器
      */
     public static void addMapping(String method, String path, Class<?> cls ,Method handler,LinkedList<MethodParamWrapper> params) {
+        if(StringUtils.isEmpty(method) || StringUtils.isEmpty(path) || handler == null){
+            return;
+        }
+
         if (!path.startsWith("/")) {
             return;
         }
