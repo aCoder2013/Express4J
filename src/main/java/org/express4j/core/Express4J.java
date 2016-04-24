@@ -24,7 +24,7 @@ public final class Express4J{
 
     private static String prefixPath = "";
 
-    private static boolean isRunning = false;
+    private static volatile boolean isRunning = false;
 
 
 
