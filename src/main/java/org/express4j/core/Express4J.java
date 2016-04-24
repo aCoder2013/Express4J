@@ -1,5 +1,6 @@
 package org.express4j.core;
 
+import org.apache.commons.lang3.StringUtils;
 import org.express4j.annotation.RequestMapping;
 import org.express4j.aop.AopFactory;
 import org.express4j.aop.Interceptor;
@@ -77,10 +78,10 @@ public final class Express4J{
     /**
      * 向指定路径添加拦截器
      * @param path
-     * @param interceptor
+     * @param interceptors
      */
-    public static void addInterceptor(String path,Class<? extends Interceptor> ... interceptor){
-        AopFactory.addMapping(path,interceptor);
+    public static void addInterceptor(String path,Class<? extends Interceptor> ... interceptors){
+        AopFactory.addMapping(path,interceptors);
     }
 
 
@@ -90,7 +91,9 @@ public final class Express4J{
      * @return
      */
     public static Express4J controller(String prefix){
-        prefixPath = prefix;
+        if(StringUtils.isNotEmpty(prefix)){
+            prefixPath = prefix;
+        }
         return Express4J.getInstance();
     }
 
@@ -110,6 +113,9 @@ public final class Express4J{
      * @param cls
      */
     private static void parseHandler(Class<?> cls) {
+        if(cls == null){
+            return;
+        }
         try {
             Object instance = cls.newInstance();
             Method[] methods = cls.getDeclaredMethods();
