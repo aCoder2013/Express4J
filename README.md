@@ -45,7 +45,6 @@ import static org.express4j.core.Express4J.run;
 public class UserControllerTest {
     public static void main(String args[]){
         controller("/user").with(UserController.class);
-        setBaseUrl("http://localhost:8080");
     }
 }
 
