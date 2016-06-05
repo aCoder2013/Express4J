@@ -2,6 +2,8 @@
 --------------------------------------------------------------------------------------------------------------------------------------
 [中文版本](https://github.com/aCoder2013/Express4J/blob/master/README-ZH.MD)
 <br>
+[![Build Status](https://travis-ci.org/aCoder2013/Express4J.svg?branch=master)](https://travis-ci.org/aCoder2013/Express4J)
+<br>
 A Simple Java Web Framework inspired by [Express](http://expressjs.com/en/index.html),it's very easy to use and very suitable for
 rapid development
 #Quick Start :
