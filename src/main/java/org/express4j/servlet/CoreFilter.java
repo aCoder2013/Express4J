@@ -4,7 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.express4j.aop.AopFactory;
 import org.express4j.aop.Interceptor;
 import org.express4j.core.Express4JConfig;
-import org.express4j.core.InterceptorScanner;
+import org.express4j.core.ExceptionHandlerFactory;
 import org.express4j.handler.DefaultHandlerExceptionResolver;
 import org.express4j.handler.HandlerExceptionResolver;
 import org.express4j.handler.HandlerExecutionChain;
@@ -21,15 +21,22 @@ import org.express4j.webserver.JettyServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Core Filter
@@ -67,7 +74,7 @@ public class CoreFilter implements Filter {
     }
 
     private void initInterceptor() {
-        InterceptorScanner.init();
+        ExceptionHandlerFactory.init();
     }
 
     private void initMultipart() {
@@ -95,11 +102,7 @@ public class CoreFilter implements Filter {
         handlerChain = getHandler(request);
         if (handlerChain != null) {
             try {
-                if(!handlerChain.applyPreHandle(request, response)){
-                    return;
-                }
-                handlerChain.invoke(request, response);
-                handlerChain.applyAfterHandler(request, response);
+              handlerChain.handle(request,response);
             } catch (Exception e) {
                 //处理异常
                 exceptionResolver.resolveException(request,response,handlerChain.getHandler(),e);
