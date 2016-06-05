@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class ExceptionHandlerFactory {
 
   private static Set<Class<?>> interceptorSet = new HashSet<>();
+
   private static Map<Class<?>, ExceptionHandlerWrapper> handlerWrapperMap = new HashMap<>();
 
   /**
