@@ -8,12 +8,13 @@ import org.express4j.utils.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by song on 16-3-20.
@@ -87,6 +88,16 @@ public class HandlerExecutionChain {
         }
         return interceptors;
     }
+
+    public void handle(HttpServletRequest request,HttpServletResponse response) throws Exception {
+      if(!applyPreHandle(request, response)){
+        return;
+      }
+      invoke(request, response);
+      applyAfterHandler(request, response);
+    }
+
+
 
     /**
      * 执行前置拦截器
