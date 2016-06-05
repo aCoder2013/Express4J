@@ -4,7 +4,7 @@ import org.apache.commons.io.IOUtils;
 import org.express4j.aop.AopFactory;
 import org.express4j.aop.Interceptor;
 import org.express4j.core.Express4JConfig;
-import org.express4j.core.InterceptorScanner;
+import org.express4j.core.ExceptionHandlerFactory;
 import org.express4j.handler.DefaultHandlerExceptionResolver;
 import org.express4j.handler.HandlerExceptionResolver;
 import org.express4j.handler.HandlerExecutionChain;
@@ -74,7 +74,7 @@ public class CoreFilter implements Filter {
     }
 
     private void initInterceptor() {
-        InterceptorScanner.init();
+        ExceptionHandlerFactory.init();
     }
 
     private void initMultipart() {
