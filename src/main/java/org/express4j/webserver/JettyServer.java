@@ -5,8 +5,9 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.express4j.servlet.CoreFilter;
 
-import javax.servlet.DispatcherType;
 import java.util.EnumSet;
+
+import javax.servlet.DispatcherType;
 
 /**
  * Created by Song on 2015/12/5.
@@ -32,8 +33,7 @@ public class JettyServer {
      * 启动服务器
      */
     public static void start(){
-        Thread startJetty = new Thread(() -> initServer(SERVER_PORT));
-        startJetty.start();
+        new Thread(() -> initServer(SERVER_PORT)).start();
     }
 
     /**
