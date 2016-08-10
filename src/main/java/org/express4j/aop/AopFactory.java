@@ -4,6 +4,7 @@ import org.express4j.utils.AntPathMatcher;
 import org.express4j.utils.PathMatcher;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Song on 2015/12/13.
@@ -13,7 +14,7 @@ public class AopFactory {
     /**
      * 路径和对应的拦截器匹配
      */
-    private static Map<String,List<Class<? extends Interceptor>>> interceptorMap = new HashMap<>();
+    private static Map<String,List<Class<? extends Interceptor>>> interceptorMap = new ConcurrentHashMap<>();
 
     /**
      * 路径匹配工具类
