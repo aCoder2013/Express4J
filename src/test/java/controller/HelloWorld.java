@@ -8,6 +8,6 @@ import static org.express4j.core.Express4J.*;
 public class HelloWorld {
 
     public static void main(String[] args) {
-        get("/hello",(req, res) ->res.renderHtml("Hello World"));
+        get("/helloworld",(req, res) ->res.renderHtml("Hello World"));
     }
 }
